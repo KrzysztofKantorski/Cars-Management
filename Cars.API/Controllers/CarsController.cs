@@ -84,12 +84,16 @@ namespace Cars.API.Controllers
             var car = await _context.Cars.FirstOrDefaultAsync(x => x.Id == id);
             if (car is null) return NotFound();
 
-           
-            //Id must be the same
-            updatedCar.Id = id;
 
-            //Update values
-            _context.Entry(car).CurrentValues.SetValues(updatedCar);
+            car.Brand = updatedCar.Brand;
+            car.Model = updatedCar.Model;
+            car.DoorsNumber = updatedCar.DoorsNumber;
+            car.LuggageCapacity = updatedCar.LuggageCapacity;
+            car.EngineCapacity = updatedCar.EngineCapacity;
+            car.FuelType = updatedCar.FuelType;
+            car.ProductionDate = updatedCar.ProductionDate;
+            car.AverageFuelConsumption = updatedCar.AverageFuelConsumption;
+            car.BodyType = updatedCar.BodyType;
 
             await _context.SaveChangesAsync();
 
