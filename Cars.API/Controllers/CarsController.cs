@@ -61,7 +61,7 @@ namespace Cars.API.Controllers
 
 
         //Delete car
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult> RemoveCar(
             [FromRoute] Guid id
             )
@@ -84,11 +84,12 @@ namespace Cars.API.Controllers
             var car = await _context.Cars.FirstOrDefaultAsync(x => x.Id == id);
             if (car is null) return NotFound();
 
+           
+            //Id must be the same
+            updatedCar.Id = id;
+
             //Update values
             _context.Entry(car).CurrentValues.SetValues(updatedCar);
-
-            //Id must be the same
-            car.Id = id; 
 
             await _context.SaveChangesAsync();
 
