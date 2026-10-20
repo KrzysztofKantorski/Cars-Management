@@ -1,5 +1,6 @@
 ﻿using Cars.Domain;
 using Cars.Infrastructure;
+using FluentValidation;
 using MediatR;
 
 namespace Cars.Application.Cars
@@ -31,5 +32,16 @@ namespace Cars.Application.Cars
                 return request.Car;
             }
         }
+
+
+
+            //Use car validator
+            public class CommandValidator: AbstractValidator<Command>
+            {
+                public CommandValidator()
+                {
+                    RuleFor(x => x.Car).SetValidator(new CarValidator());
+                }
+            }
     }
 }
