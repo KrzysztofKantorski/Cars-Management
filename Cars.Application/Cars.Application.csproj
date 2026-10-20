@@ -7,7 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="8.2.2" />
+    <PackageReference Include="MediatR" Version="8.0.0" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Cars.Domain\Cars.Domain.csproj" />
+    <ProjectReference Include="..\Cars.Infrastructure\Cars.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Behaviors\" />
   </ItemGroup>
 
 </Project>
