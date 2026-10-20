@@ -36,6 +36,10 @@ namespace Cars.Application.Cars
             RuleFor(x => x.ProductionDate)
                 .LessThanOrEqualTo(DateTime.UtcNow)
                 .WithMessage("Production date cannot be in the future.");
+
+            RuleFor(x => x.AverageFuelConsumption)
+                .GreaterThan(0)
+                .WithMessage("Average fuel consumption must be greater than 0.");
         }
     }
 }

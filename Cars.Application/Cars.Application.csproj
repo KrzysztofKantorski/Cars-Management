@@ -17,8 +17,4 @@
     <ProjectReference Include="..\Cars.Infrastructure\Cars.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Behaviors\" />
-  </ItemGroup>
-
 </Project>
