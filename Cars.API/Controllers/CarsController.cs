@@ -1,5 +1,6 @@
-﻿using Cars.Domain;
-using Cars.Infrastructure;
+﻿using Cars.Application.Cars;
+using Cars.Domain;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,10 @@ namespace Cars.API.Controllers
     [ApiController]
     public class CarsController : BaseApiController
     {
-        private readonly DataContext _context;
-        public CarsController(DataContext context) 
+        private readonly ISender _sender;
+        public CarsController(ISender sender) 
         {
-            _context = context;
+            _sender = sender;
         }
 
 
@@ -21,8 +22,8 @@ namespace Cars.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Car>>> GetCars()
         {
-            var cars= await _context.Cars.AsNoTracking().ToListAsync(); 
-            return Ok(cars);
+
+            return await _sender.Send(new GetCarsList.Query());
         }
 
 
@@ -31,9 +32,12 @@ namespace Cars.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<Car>> GetCar(Guid id)
         {
-            var car = await _context.Cars.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == id);
-            if (car is null) return NotFound();
+            var car =  await _sender.Send(new Details.Query { Id = id});
+
+            if(car is null)
+            {
+                return NotFound();
+            }
 
             return car;
         }
