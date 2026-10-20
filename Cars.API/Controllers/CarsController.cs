@@ -50,15 +50,15 @@ namespace Cars.API.Controllers
             [FromBody] Car car
             )
         {
-            if(car.Id == Guid.Empty)
-            {
-                car.Id = Guid.NewGuid();
-            }
+            var result = await _sender.Send(new Create.Command { Car = car });
 
-            await _context.Cars.AddAsync(car);
-            await _context.SaveChangesAsync();
+            return CreatedAtAction(
+                nameof(GetCar),
+                new { Id = result.Id },
+                result
+            );
 
-            return Created();
+
         }
 
 
@@ -70,12 +70,12 @@ namespace Cars.API.Controllers
             [FromRoute] Guid id
             )
         {
-            var car = await _context.Cars.FirstOrDefaultAsync(x => x.Id == id);
-            if(car is null) return NotFound();
+            bool result = await _sender.Send(new Delete.Command { Id = id });
+            if(!result)
+            {
+                return NotFound();
+            }
 
-            _context.Cars.Remove(car);
-
-            await _context.SaveChangesAsync();
             return NoContent();
         }
 
@@ -85,21 +85,16 @@ namespace Cars.API.Controllers
         [HttpPut("{id:guid}")]
         public async Task<ActionResult> UpdateCar(Guid id, [FromBody] Car updatedCar)
         {
-            var car = await _context.Cars.FirstOrDefaultAsync(x => x.Id == id);
-            if (car is null) return NotFound();
+            var result = await _sender.Send(new Edit.Command
+            {
+                Id = id,
+                Car = updatedCar
+            });
 
-
-            car.Brand = updatedCar.Brand;
-            car.Model = updatedCar.Model;
-            car.DoorsNumber = updatedCar.DoorsNumber;
-            car.LuggageCapacity = updatedCar.LuggageCapacity;
-            car.EngineCapacity = updatedCar.EngineCapacity;
-            car.FuelType = updatedCar.FuelType;
-            car.ProductionDate = updatedCar.ProductionDate;
-            car.AverageFuelConsumption = updatedCar.AverageFuelConsumption;
-            car.BodyType = updatedCar.BodyType;
-
-            await _context.SaveChangesAsync();
+            if(!result)
+            {
+                return NotFound();
+            }
 
             return NoContent();
         }
