@@ -4,7 +4,7 @@ using Cars.Infrastructure;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-
+using Cars.API.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -67,6 +67,10 @@ app.UseCors("CorsPolicy");
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+//Middleware
+app.UseMiddleware<ApiExceptionMiddleware>();
 
 using var scope = app.Services.CreateScope();
 
