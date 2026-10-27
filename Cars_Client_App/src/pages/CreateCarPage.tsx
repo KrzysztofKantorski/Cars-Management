@@ -3,6 +3,7 @@ import type { NewCar } from "../models/Car"
 import { createCar } from "../services/carService"
 import { useState } from "react";
 import CarForm from "../components/CarForm";
+import ApiError from "../components/ApiError";
 
 function CreateCarPage() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ function CreateCarPage() {
 
   if (error) 
   {
-    return <p className="error">{error}</p>;
+    return <ApiError message={error}/>;
   }
 
 
@@ -34,7 +35,7 @@ function CreateCarPage() {
       <div>Add new car</div>
       <CarForm
         onSubmit={handleCreateCar}
-        submitText="Edit"
+        submitText="Add"
       />
     </>
   )

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import type { Car } from "../models/Car";
 import { getCarById } from "../services/carService";
+import Loading from "../components/Loading";
+import ApiError from "../components/ApiError";
 
 function CarsDetailsPage() {
 
@@ -73,12 +75,12 @@ function CarsDetailsPage() {
 
   if (loading) 
   {
-    return <p>Loading data...</p>;
+    return <Loading/>;
   }
 
   if (error) 
   {
-    return <p className="error">{error}</p>;
+    return <ApiError message={error}/>
   }
 
   if (car == null) 

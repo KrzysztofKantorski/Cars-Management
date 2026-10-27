@@ -3,6 +3,8 @@ import type { Car, NewCar } from "../models/Car";
 import { getCarById, updateCar } from "../services/carService";
 import { useEffect, useState } from "react";
 import CarForm from "../components/CarForm";
+import ApiError from "../components/ApiError";
+import Loading from "../components/Loading";
 
 function EditCarPage() {
 
@@ -92,12 +94,12 @@ function EditCarPage() {
 
   if (error) 
   {
-    return <p className="error">{error}</p>;
+    return <ApiError message={error}/>;
   }
 
   if (loading) 
   {
-    return <p>Loading data...</p>;
+    return <Loading/>;
   }
 
   return (

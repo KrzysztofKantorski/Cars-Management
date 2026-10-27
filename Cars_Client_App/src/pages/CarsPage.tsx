@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import type { Car } from "../models/Car"
 import { deleteCar, getCars } from "../services/carService";
 import Card from "../components/Card";
+import Loading from "../components/Loading";
+import ApiError from "../components/ApiError";
 
 function CarsPage() {
 
@@ -21,7 +23,7 @@ function CarsPage() {
         {
             //Confirm window
             const confirm = window.confirm(
-                `Do you want to delete car with id: ${id}?`
+                `Do you want to delete this car?`
             );
 
             //User did not confirm window
@@ -113,12 +115,12 @@ function CarsPage() {
     
     if (loading) 
     {
-        return <p>Loading data...</p>;
+        return <Loading/>;
     }
 
     if (error) 
     {
-        return <p className="error">{error}</p>;
+        return <ApiError message={error}/>;
     }
 
     if (cars.length === 0) 
