@@ -34,6 +34,7 @@ function CreateCarPage() {
       <div>Add new car</div>
       <CarForm
         onSubmit={handleCreateCar}
+        submitText="Edit"
       />
     </>
   )

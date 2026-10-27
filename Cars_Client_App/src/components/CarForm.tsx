@@ -1,27 +1,33 @@
 import { useState } from "react";
-import type { NewCar } from "../models/Car";
+import type { Car, NewCar } from "../models/Car";
 
 
 interface CarFormProps 
 {
   onSubmit: (carData: NewCar) => Promise<void>;
+  initialData?: Car;
+  submitText: string;
 }
 
 
-function CarForm({ onSubmit}: CarFormProps){
+const defaultCarValues: NewCar = {
+  brand: "",
+  model: "",
+  doorsNumber: 4,
+  luggageCapacity: 400,
+  engineCapacity: 2000,
+  fuelType: 1,
+  productionDate: "",
+  averageFuelConsumption: 6.5,
+  bodyType: 1,
+};
 
-    const [formData, setFormData] = useState<NewCar>({
-        brand: "",
-        model: "",
-        doorsNumber: 4,
-        luggageCapacity: 400,
-        engineCapacity: 2000,
-        fuelType: 1,
-        productionDate: "",
-        averageFuelConsumption: 6.5,
-        bodyType: 1,
-    });
+function CarForm({ onSubmit, initialData, submitText}: CarFormProps){
 
+   
+    //Fill inputs with initial data
+    const [formData, setFormData] = useState<NewCar>(initialData ?? defaultCarValues);
+    
 
     async function handleSubmit (e: React.FormEvent) 
     {
@@ -150,14 +156,14 @@ function CarForm({ onSubmit}: CarFormProps){
             <label>
                 bodyType
                 <input
-                    name="averageFuelConsumption"
+                    name="bodyType"
                     type="number"
                     value={formData.bodyType}
                     onChange={handleChange}
                     required
                 />
             </label>
-            <button type="submit" className="btn-submit">Add</button>
+            <button type="submit" className="btn-submit">{submitText}</button>
         </form>
         </>
     )

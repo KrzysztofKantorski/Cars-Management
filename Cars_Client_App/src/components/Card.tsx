@@ -17,12 +17,14 @@ function Card(
         <div className="card">
             <h2>{car.brand}</h2>
             <p>{car.model}</p>
+
             <Link to={`/cars/${car.id}`}>Details</Link>
             
             {onRemove &&
                 <button onClick={() => onRemove(car.id)}>Delete</button>
             }
-           
+
+           <Link to={`/cars/${car.id}/edit`}>Edit</Link>
         </div>
     </>
   ) 

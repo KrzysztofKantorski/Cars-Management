@@ -15,7 +15,7 @@
     {
       "id": "3",
       "brand": "Toyota",
-      "model": "MR2",
+      "model": "Supra",
       "doorsNumber": 5,
       "luggageCapacity": 470,
       "engineCapacity": 1800,
@@ -25,15 +25,15 @@
       "bodyType": 1
     },
     {
-      "brand": "Opel",
-      "model": "Astra",
-      "doorsNumber": "4",
-      "luggageCapacity": 400,
-      "engineCapacity": 2000,
-      "fuelType": 1,
+      "brand": "Volkswagen",
+      "model": "Bora",
+      "doorsNumber": "5",
+      "luggageCapacity": "600",
+      "engineCapacity": "3000",
+      "fuelType": "2",
       "productionDate": "2026-10-13",
-      "averageFuelConsumption": 6.5,
-      "bodyType": 1,
+      "averageFuelConsumption": "7",
+      "bodyType": "2",
       "id": "veY77hPnrmY"
     }
   ],
