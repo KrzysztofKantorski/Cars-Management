@@ -3,10 +3,11 @@ import type { Car } from '../models/Car';
 
 interface CardProps {
   car: Car;
+  onRemove?: (id: string) => Promise<void>;
 }
 
 function Card(
-    { car }: CardProps
+    { car, onRemove }: CardProps
 )
 
 
@@ -17,7 +18,11 @@ function Card(
             <h2>{car.brand}</h2>
             <p>{car.model}</p>
             <Link to={`/cars/${car.id}`}>Details</Link>
-            <button>Delete</button>
+            
+            {onRemove &&
+                <button onClick={() => onRemove(car.id)}>Delete</button>
+            }
+           
         </div>
     </>
   ) 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import type { Car } from "../models/Car"
-import { getCars } from "../services/carService";
+import { deleteCar, getCars } from "../services/carService";
 import Card from "../components/Card";
 
 function CarsPage() {
@@ -13,6 +13,46 @@ function CarsPage() {
 
     //loading state
     const [loading, setLoading] = useState<boolean>(true);
+
+
+    //Delete car
+    async function removeCar(id: string){
+        try
+        {
+            //Confirm window
+            const confirm = window.confirm(
+                `Do you want to delete car with id: ${id}?`
+            );
+
+            //User did not confirm window
+            if(!confirm)
+            {
+                return;
+            }
+
+            //Call service method
+            await deleteCar(id);
+
+            //Update car list
+            setCars((prevCars)=> prevCars.filter(car => car.id != id));
+        }
+
+        catch(err)
+        {
+            if (err instanceof Error) 
+            {
+                setError(`An error occurred: ${err.message}`);
+            } 
+
+            else 
+            {
+                setError("Unexpected error occurred while deleting.");
+            }
+        }
+       
+    }
+
+
 
 
     useEffect(()=>{
@@ -45,7 +85,7 @@ function CarsPage() {
 
                 else 
                 {
-                setError("Unexpected error occured.");
+                    setError("Unexpected error occured.");
                 }
             }
 
@@ -95,6 +135,7 @@ function CarsPage() {
                     <Card
                         key={car.id}
                         car={car}
+                        onRemove={removeCar}
                     />
                 ))}
             </div>
