@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import type { Car } from "../models/Car"
-import { getCars } from "../services/CarService";
+import { getCars } from "../services/carService";
+import Card from "../components/Card";
 
 function CarsPage() {
 
@@ -72,7 +73,7 @@ function CarsPage() {
     
     if (loading) 
     {
-        return <p>Ładowanie danych...</p>;
+        return <p>Loading data...</p>;
     }
 
     if (error) 
@@ -82,25 +83,19 @@ function CarsPage() {
 
     if (cars.length === 0) 
     {
-        return <p>Nie znaleziono samochodów.</p>;
+        return <p>No cars found.</p>;
     }
 
 
 
     return (
         <>
-            <div>
-
+            <div className="card-wrapper">
                 {cars.map((car)=> (
-                    <div>
-                        <h2>
-                            {car.brand}
-                        </h2>
-
-                        <p>
-                            {car.model}
-                        </p>
-                    </div>
+                    <Card
+                        key={car.id}
+                        car={car}
+                    />
                 ))}
             </div>
         </>

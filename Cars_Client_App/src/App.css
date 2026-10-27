@@ -7,3 +7,20 @@
   gap:1rem
 }
 
+
+.card{
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  background-color: brown;
+  border-radius: .5rem;
+}
+.card-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  margin: 5rem auto;
+  flex-wrap: wrap;
+  gap: 1rem
+}
