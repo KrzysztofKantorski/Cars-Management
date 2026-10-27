@@ -23,6 +23,18 @@
       "productionDate": "2022-05-10",
       "averageFuelConsumption": 6.4,
       "bodyType": 1
+    },
+    {
+      "brand": "Opel",
+      "model": "Astra",
+      "doorsNumber": "4",
+      "luggageCapacity": 400,
+      "engineCapacity": 2000,
+      "fuelType": 1,
+      "productionDate": "2026-10-13",
+      "averageFuelConsumption": 6.5,
+      "bodyType": 1,
+      "id": "veY77hPnrmY"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

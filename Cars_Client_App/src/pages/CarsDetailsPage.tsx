@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
 import type { Car } from "../models/Car";
 import { getCarById } from "../services/carService";
 
