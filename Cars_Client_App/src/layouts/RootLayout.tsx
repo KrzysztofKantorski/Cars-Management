@@ -1,16 +1,15 @@
 import { Outlet } from 'react-router';
+import Menu from '../components/menu';
 
 function RootLayout() {
   return (
     <>
-    <nav>
-        <button>Go to link</button>
-    </nav>
-      <main>
+    <Menu/>
+    <main>
         <Outlet />
-      </main>
+    </main>
     </>
-  )
+  ) 
 }
 
 export default RootLayout
