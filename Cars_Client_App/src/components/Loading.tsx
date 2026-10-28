@@ -1,7 +1,9 @@
+import { Spinner } from "./ui/spinner";
+
 function Loading()
 {
   return (
-    <p>Loading...</p>
+    <Spinner className="size-6"></Spinner>
   ) 
 }
 
