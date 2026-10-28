@@ -10,7 +10,10 @@ function CarsDetailsPage() {
   //Get id param from route
   const { id } = useParams();
 
-  const id_string = id.toString();
+  if(!id)
+  {
+    return <ApiError message={"No id was provided"}/>
+  }
 
   //Car state
   const [car, setCar] = useState<Car | null>(null)
@@ -63,7 +66,7 @@ function CarsDetailsPage() {
     }
 
     //Call load cars function
-    loadCar(id_string)
+    loadCar(id)
 
     //Cleanup
     return () => {

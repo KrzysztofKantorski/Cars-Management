@@ -7,7 +7,7 @@ import ApiError from "../components/ApiError";
 
 function CreateCarPage() {
   const navigate = useNavigate();
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
 
   //Handle form action
@@ -20,7 +20,19 @@ function CreateCarPage() {
       navigate("/cars");
     }
     catch(error){
-      setError(`An error occured: ${error.message}`)
+      //Request has been abroted
+      if(error instanceof DOMException && error.name === "AbortError")
+      {
+        return;
+      }
+      if (error instanceof Error) 
+      {
+        setError(error.message);
+      } 
+      else 
+      {
+        setError("Unexpected error occured.");
+      }
     }
   }
 

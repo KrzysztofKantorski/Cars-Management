@@ -36,7 +36,7 @@ function CarForm({ onSubmit, initialData, submitText}: CarFormProps){
     };
 
 
-    function handleChange(e) {
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = e.target;
 
         setFormData((currentFormData) => 
