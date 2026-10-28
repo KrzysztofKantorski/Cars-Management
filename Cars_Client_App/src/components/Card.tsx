@@ -1,7 +1,14 @@
 import { Link } from 'react-router';
 import type { Car } from '../models/Car';
 import { Button } from './ui/button';
-
+import {
+  Card as UiCard,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card"
 
 interface CardProps {
   car: Car;
@@ -16,17 +23,29 @@ function Card(
 { 
   return (
     <>
-        <div className="card">
-            <h2>{car.brand}</h2>
-            <p>{car.model}</p>
-            <Link to={`/cars/${car.id}`}>Details</Link>
-            <Button>Button</Button>
-            {onRemove &&
-                <button onClick={() => onRemove(car.id)}>Delete</button>
-            }
+    <UiCard>
+      <CardHeader>
+        <CardTitle>{car.brand}</CardTitle>
+        <CardDescription>
+          {car.model}
+        </CardDescription>
+      </CardHeader>
+      
+      <CardFooter className="justify-end gap-2">
 
-           <Link to={`/cars/${car.id}/edit`}>Edit</Link>
-        </div>
+        <Button>
+          <Link to={`/cars/${car.id}`}>Details</Link>
+        </Button>
+
+        <Button>
+          <Link to={`/cars/${car.id}/edit`}>Edit</Link>
+        </Button>
+        
+        {onRemove &&
+          <Button onClick={() => onRemove(car.id)}>Delete</Button>
+        }
+      </CardFooter>
+    </UiCard>
     </>
   ) 
 }
