@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import type { Car } from '../models/Car';
 import { Button } from './ui/button';
 import {
@@ -15,35 +15,40 @@ interface CardProps {
   onRemove?: (id: string) => Promise<void>;
 }
 
-function Card(
-    { car, onRemove }: CardProps
-)
+function Card({ car, onRemove }: CardProps){ 
+  const navigate = useNavigate();
 
-
-{ 
+  // Cała logika funkcji znajduje się wewnątrz ciała komponentu Card
+  function goToPage(route: string) {
+    console.log("siup");
+    navigate(route);
+  }
   return (
     <>
-    <UiCard>
+   <UiCard className="w-full max-w-sm">
       <CardHeader>
         <CardTitle>{car.brand}</CardTitle>
-        <CardDescription>
-          {car.model}
-        </CardDescription>
+        <CardDescription>{car.model}</CardDescription>
       </CardHeader>
       
-      <CardFooter className="justify-end gap-2">
-
-        <Button>
-          <Link to={`/cars/${car.id}`}>Details</Link>
+      <CardFooter className="flex justify-start gap-4 border-t pt-4">
+        <Button variant="outline" size="sm" onClick={() => goToPage(`/cars/${car.id}`)}>
+          Details
         </Button>
 
-        <Button>
-          <Link to={`/cars/${car.id}/edit`}>Edit</Link>
+        <Button variant="secondary" size="sm"  onClick={() => goToPage(`/cars/${car.id}/edit`)}>
+          Edit
         </Button>
         
-        {onRemove &&
-          <Button onClick={() => onRemove(car.id)}>Delete</Button>
-        }
+        {onRemove && (
+          <Button 
+            variant="destructive" 
+            size="sm" 
+            onClick={() => onRemove(car.id)}
+          >
+            Delete
+          </Button>
+        )}
       </CardFooter>
     </UiCard>
     </>

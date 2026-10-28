@@ -132,7 +132,7 @@ function CarsPage() {
 
     return (
         <>
-            <div className="flex flex-wrap items-center justify-center gap-[1rem]">
+            <div className="flex flex-wrap items-center justify-center gap-[2rem]">
                 {cars.map((car)=> (
                     <Card
                         key={car.id}

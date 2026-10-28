@@ -4,6 +4,7 @@ import type { Car } from "../models/Car";
 import { getCarById } from "../services/carService";
 import Loading from "../components/Loading";
 import ApiError from "../components/ApiError";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
 
 function CarsDetailsPage() {
 
@@ -94,15 +95,66 @@ function CarsDetailsPage() {
 
   return(
     <>
-      <h2>Brand: {car.brand}</h2>
-      <p>Model: {car.model}</p>
-      <p>Doors number: {car.doorsNumber}</p>
-      <p>Luggage capacity: {car.luggageCapacity}</p>
-      <p>Engine capacity: {car.engineCapacity}</p>
-      <p>Fuel type: {car.fuelType}</p>
-      <p>Production date: {car.productionDate}</p>
-      <p>Avg fuel consumption: {car.averageFuelConsumption} / 100 km</p>
-      <p>Body type: {car.bodyType}</p>
+    <div className="flex items-center justify-center w-full">
+      <Table className="w-[50%] ml-[25%] bg-destructive p-[2rem]">
+        <TableCaption>Car {car.id} info</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Property</TableHead>
+            <TableHead  className="text-right">Value</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+
+          <TableRow>
+            <TableCell>Brand</TableCell>
+            <TableCell className="text-right">{car.brand}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell>Model</TableCell>
+            <TableCell className="text-right">{car.model}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell>Doors number</TableCell>
+            <TableCell className="text-right">{car.doorsNumber}</TableCell>
+          </TableRow>
+
+
+          <TableRow>
+            <TableCell>Luggage capacity</TableCell>
+            <TableCell className="text-right">{car.luggageCapacity}</TableCell>
+          </TableRow>
+
+
+          <TableRow>
+            <TableCell>Engine capacity</TableCell>
+            <TableCell className="text-right">{car.engineCapacity}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell>Fuel type</TableCell>
+            <TableCell className="text-right">{car.fuelType}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell>Production date</TableCell>
+            <TableCell className="text-right">{car.productionDate}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell>Avg fuel consumption</TableCell>
+            <TableCell className="text-right">{car.averageFuelConsumption}</TableCell>
+          </TableRow>
+
+          <TableRow>
+            <TableCell>Body type</TableCell>
+            <TableCell className="text-right ">{car.bodyType}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
     </>
   )
 }
