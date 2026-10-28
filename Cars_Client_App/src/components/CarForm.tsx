@@ -58,7 +58,7 @@ function CarForm({ onSubmit, initialData, submitText}: CarFormProps){
 
     return(
         <>
-        <div className="flex items-start justify-center w-full mt-[2rem]">
+        <div className="flex items-start justify-center w-full mt-[4rem]">
             <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-3xl space-y-6 bg-sky-500/50 p-[2rem] rounded-md">
 
 
@@ -117,7 +117,7 @@ function CarForm({ onSubmit, initialData, submitText}: CarFormProps){
                     </FieldGroup>
                 </FieldSet>
             </div>
-                <Button type="submit" variant="outline" className="w-[min-content] text-center ml-[45%] mt-[2rem]">{submitText}</Button>
+                <Button type="submit" variant="outline" className="w-[30%] ml-[35%] text-center mt-[2rem]">{submitText}</Button>
             </form>
         </div>
         </>

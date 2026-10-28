@@ -44,7 +44,7 @@ function CreateCarPage() {
 
   return (
     <>
-      <div>Add new car</div>
+      <h2 className="text-center">Add car</h2>
       <CarForm
         onSubmit={handleCreateCar}
         submitText="Add"

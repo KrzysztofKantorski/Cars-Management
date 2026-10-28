@@ -29,7 +29,7 @@ function Card({ car, onRemove }: CardProps){
         <CardDescription>{car.model}</CardDescription>
       </CardHeader>
       
-      <CardFooter className="flex justify-start gap-4 border-t pt-4">
+      <CardFooter className="flex justify-start gap-4 border-t pt-4 bg-sky-500/50">
         <Button variant="outline" size="sm" onClick={() => goToPage(`/cars/${car.id}`)}>
           Details
         </Button>
