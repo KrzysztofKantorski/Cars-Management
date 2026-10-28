@@ -25,16 +25,16 @@
       "bodyType": 1
     },
     {
-      "brand": "Volkswagen",
-      "model": "Bora",
-      "doorsNumber": "5",
-      "luggageCapacity": "600",
-      "engineCapacity": "3000",
+      "brand": "Honda",
+      "model": "Accord",
+      "doorsNumber": "45",
+      "luggageCapacity": 400,
+      "engineCapacity": "2400",
       "fuelType": "2",
-      "productionDate": "2026-10-13",
-      "averageFuelConsumption": "7",
+      "productionDate": "2026-10-29",
+      "averageFuelConsumption": 6.5,
       "bodyType": "2",
-      "id": "veY77hPnrmY"
+      "id": "6QI6PnwiZtY"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
