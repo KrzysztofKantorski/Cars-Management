@@ -2,9 +2,9 @@
   "cars": [
     {
       "id": "1",
-      "brand": "Toyota",
-      "model": "Yaris",
-      "doorsNumber": 5,
+      "brand": "Audi",
+      "model": "A5",
+      "doorsNumber": "3",
       "luggageCapacity": 470,
       "engineCapacity": 1800,
       "fuelType": 1,
