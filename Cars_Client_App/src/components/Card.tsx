@@ -1,9 +1,8 @@
-import { Link, useNavigate } from 'react-router';
+import {useNavigate } from 'react-router';
 import type { Car } from '../models/Car';
 import { Button } from './ui/button';
 import {
   Card as UiCard,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -18,7 +17,6 @@ interface CardProps {
 function Card({ car, onRemove }: CardProps){ 
   const navigate = useNavigate();
 
-  // Cała logika funkcji znajduje się wewnątrz ciała komponentu Card
   function goToPage(route: string) {
     console.log("siup");
     navigate(route);

@@ -117,7 +117,7 @@
 
     return (
       <>
-        <div>Cars edit</div>
+        <h2 className="text-center">Cars edit</h2>
         <CarForm
           onSubmit={handleUpdateCar}
           initialData={car ?? undefined}

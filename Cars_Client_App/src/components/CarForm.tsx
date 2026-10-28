@@ -1,5 +1,8 @@
 import { useState } from "react";
 import type { Car, NewCar } from "../models/Car";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "./ui/field";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
 
 interface CarFormProps 
@@ -55,116 +58,68 @@ function CarForm({ onSubmit, initialData, submitText}: CarFormProps){
 
     return(
         <>
-        <form className="car-form" onSubmit={handleSubmit}>
-
-            <label>
-                Brand
-                <input
-                    name="brand"
-                    type="text"
-                    value={formData.brand}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
+        <div className="flex items-start justify-center w-full mt-[2rem]">
+            <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-3xl space-y-6 bg-sky-500/50 p-[2rem] rounded-md">
 
 
-            <label>
-                Model
-                <input
-                    name="model"
-                    type="text"
-                    value={formData.model}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
+                <FieldSet className="w-full" >
+                    <FieldGroup className="space-y-2">
+                        <Field>
+                            <FieldLabel htmlFor="name">Car brand</FieldLabel>
+                            <Input autoComplete="off" placeholder="type..." name="brand" type="text" value={formData.brand} onChange={handleChange} required/>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="name">Car model</FieldLabel>
+                            <Input autoComplete="off" placeholder="type..." name="model" type="text" value={formData.model} onChange={handleChange} required/>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="name">Doors number</FieldLabel>
+                            <Input autoComplete="off" placeholder="type..." name="doorsNumber" type="number" value={formData.doorsNumber} onChange={handleChange} required/>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="name">Luggage capacity</FieldLabel>
+                            <Input autoComplete="off" placeholder="type..." name="luggageCapacity" type="number" value={formData.luggageCapacity} onChange={handleChange} required/>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="name">Engine capacity</FieldLabel>
+                            <Input autoComplete="off" placeholder="type..." name="engineCapacity" type="number" value={formData.engineCapacity} onChange={handleChange} required/>
+                        </Field>
+                    </FieldGroup>
+                </FieldSet>
+                <FieldSet className="w-full">
+                    <FieldGroup className="space-y-2">
+
+                        <Field>
+                            <FieldLabel htmlFor="name">Fuel type</FieldLabel>
+                            <Input autoComplete="off" placeholder="type..." name="fuelType" type="number" value={formData.fuelType} onChange={handleChange} required/>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="name">Production date</FieldLabel>
+                            <Input autoComplete="off" placeholder="type..." name="productionDate" type="date" value={formData.productionDate} onChange={handleChange} required/>
+                        </Field>
+
+                        <Field>
+                            <FieldLabel htmlFor="name">Avg fuel consumption</FieldLabel>
+                            <Input autoComplete="off" placeholder="type..." name="averageFuelConsumption" type="number" value={formData.averageFuelConsumption} onChange={handleChange} required/>
+                        </Field>
 
 
-            <label>
-                Doors number
-                <input
-                    name="doorsNumber"
-                    type="number"
-                    value={formData.doorsNumber}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
-
-
-             <label>
-                Luggage capacity
-                <input
-                    name="luggageCapacity"
-                    type="number"
-                    value={formData.luggageCapacity}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
-
-
-             <label>
-                Engine capacity
-                <input
-                    name="engineCapacity"
-                    type="number"
-                    value={formData.engineCapacity}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
-
-
-             <label>
-                Fuel type
-                <input
-                    name="fuelType"
-                    type="number"
-                    value={formData.fuelType}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
-
-
-             <label>
-                Production date
-                <input
-                    name="productionDate"
-                    type="date"
-                    value={formData.productionDate}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
-
-
-            <label>
-                Avg fuel consumption
-                <input
-                    name="averageFuelConsumption"
-                    type="number"
-                    value={formData.averageFuelConsumption}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
-
-
-            <label>
-                bodyType
-                <input
-                    name="bodyType"
-                    type="number"
-                    value={formData.bodyType}
-                    onChange={handleChange}
-                    required
-                />
-            </label>
-            <button type="submit" className="btn-submit">{submitText}</button>
-        </form>
+                        <Field>
+                            <FieldLabel htmlFor="name">Body type</FieldLabel>
+                            <Input autoComplete="off" placeholder="type..." name="bodyType" type="number" value={formData.bodyType} onChange={handleChange} required/>
+                        </Field>
+                    </FieldGroup>
+                </FieldSet>
+            </div>
+                <Button type="submit" variant="outline" className="w-[min-content] text-center ml-[45%] mt-[2rem]">{submitText}</Button>
+            </form>
+        </div>
         </>
     )
 }
