@@ -5,6 +5,9 @@ import Card from "../components/Card";
 import Loading from "../components/Loading";
 import ApiError from "../components/ApiError";
 import axios from "axios";
+import {useCarUiStore} from "../store/useCarUiStore";
+
+
 
 function CarsPage() {
 
@@ -16,6 +19,38 @@ function CarsPage() {
 
     //loading state
     const [loading, setLoading] = useState<boolean>(true);
+
+
+
+    //Global state for favorite cars
+ 
+    const searchTerm = useCarUiStore((state)=> state.searchTerm);
+    const setSearchTerm = useCarUiStore((state)=> state.setSearchTerm);
+    const showFavoritesOnly = useCarUiStore((state)=> state.showFavoritesOnly);
+    const setShowFavoritesOnly = useCarUiStore((state)=> state.setShowFavoritesOnly);
+    const favoriteCarIds = useCarUiStore((state)=> state.favoriteCarIds);
+
+    //Remove car from global state
+    const removeFavorite = useCarUiStore(
+        (state) => state.removeFavorite
+    );
+
+    //Normalize search query
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+
+    const visibleCars = cars.filter((car)=>{
+
+        //Check if car matches search query and favorite filter
+        const matchesSearch = 
+            car.brand.toLowerCase().includes(normalizedSearch)
+            || 
+            car.model.toLowerCase().includes(normalizedSearch);
+        
+        const matchesFavorite = !showFavoritesOnly || favoriteCarIds.includes(car.id);
+
+        return matchesSearch && matchesFavorite;
+
+    })
 
 
     //Delete car
@@ -35,6 +70,9 @@ function CarsPage() {
 
             //Call service method
             await deleteCar(id);
+
+            //Remove from favorites
+            removeFavorite(id);
 
             //Update car list
             setCars((prevCars)=> prevCars.filter(car => car.id != id));
@@ -132,8 +170,22 @@ function CarsPage() {
 
     return (
         <>
+        <label>
+            <input type="text"
+                placeholder="Search cars..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <input type="checkbox"
+                checked={showFavoritesOnly}
+                onChange={(e) => setShowFavoritesOnly(e.target.checked)}
+            />
+            Show favorites only
+        </label>
+
+
             <div className="flex flex-wrap items-center justify-center gap-[2rem] w-[70%] ml-[15%] mt-[5rem] pb-[5rem]">
-                {cars.map((car)=> (
+                {visibleCars.map((car)=> (
                     <Card
                         key={car.id}
                         car={car}

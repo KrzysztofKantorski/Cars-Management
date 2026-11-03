@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import type { CarUiStore } from '../models/CarUiStore'
 import { persist } from 'zustand/middleware'
 
+import type { CarUiStore } from '../models/CarUiStore'
 
 export const useCarUiStore = create<CarUiStore>()(
     persist(
@@ -10,7 +10,7 @@ export const useCarUiStore = create<CarUiStore>()(
             showFavoritesOnly: false,
             favoriteCarIds: [],
 
-            
+
             //Search query
             setSearchTerm: (value: string)=>
                 set({searchTerm: value}),

@@ -1,9 +1,15 @@
-import { Link, NavLink } from 'react-router';
-import { NavigationMenu, NavigationMenuItem, NavigationMenuLink,
-   NavigationMenuList, 
-   navigationMenuTriggerStyle} from './ui/navigation-menu';
+import { Link } from 'react-router';
+import { NavigationMenu, NavigationMenuItem, NavigationMenuList, } from './ui/navigation-menu';
+import { useCarUiStore } from '../store/useCarUiStore';
 
 function Menu() {
+
+  //Get quantity of favorite cars
+  const favoriteCount = useCarUiStore(
+    (state) =>state.favoriteCarIds.length,
+  )
+
+
   return (
     <>
     <div className="w-full bg-sky-500/50 mb-[2rem] p-[1rem]">
@@ -23,6 +29,13 @@ function Menu() {
               Cars
             </Link>
         </NavigationMenuItem>
+
+        <NavigationMenuItem className='mr-[1rem]'>
+          <Link to="/cars/new">
+              Add car
+            </Link>
+        </NavigationMenuItem>
+
 
         <NavigationMenuItem className='mr-[1rem]'>
           <Link to="/cars/new">

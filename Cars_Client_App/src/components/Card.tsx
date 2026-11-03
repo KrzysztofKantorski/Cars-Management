@@ -1,6 +1,7 @@
 import {useNavigate } from 'react-router';
 import type { Car } from '../models/Car';
 import { Button } from './ui/button';
+import {useCarUiStore} from '../store/useCarUiStore';
 import {
   Card as UiCard,
   CardDescription,
@@ -17,6 +18,16 @@ interface CardProps {
 function Card({ car, onRemove }: CardProps){ 
   const navigate = useNavigate();
 
+  //Check if car is in favorites
+  const isFavorite = useCarUiStore(
+    (state)=> state.favoriteCarIds.includes(car.id)
+  );
+
+
+  const toggleFavorite = useCarUiStore(
+    (state) => state.toggleFavorite
+  );
+
   function goToPage(route: string) {
     console.log("siup");
     navigate(route);
@@ -29,7 +40,7 @@ function Card({ car, onRemove }: CardProps){
         <CardDescription>{car.model}</CardDescription>
       </CardHeader>
       
-      <CardFooter className="flex justify-start gap-4 border-t pt-4 bg-sky-500/50">
+      <CardFooter className="flex justify-start align-center gap-4 border-t pt-4 bg-sky-500/50 flex-wrap">
         <Button variant="outline" size="sm" onClick={() => goToPage(`/cars/${car.id}`)}>
           Details
         </Button>
@@ -47,6 +58,11 @@ function Card({ car, onRemove }: CardProps){
             Delete
           </Button>
         )}
+
+
+        <Button variant="outline" size="sm"  onClick={() => toggleFavorite(car.id)}>
+          {isFavorite ? "Remove from favorites" : "Add to favorites"}
+        </Button>
       </CardFooter>
     </UiCard>
     </>
