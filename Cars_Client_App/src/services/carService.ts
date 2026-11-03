@@ -1,17 +1,46 @@
 import type { Car,  NewCar } from "../models/Car";
+import {appClient} from "../api/appClient";
+import axios from "axios";
 
-const apiUrl = 'http://localhost:3000/cars';
 
-
-
-//check if response is OK
-async function ensureSuccess(response: Response)
+//Error handling
+function createServiceError(error: unknown, message: string): Error
 {
-    if(!response.ok)
+    if(axios.isAxiosError(error))
     {
-        throw new Error(`Request failed. Status: ${response.status}`)
+        if(error.response)
+        {
+            return new Error(`${message} Status HTTP: ${error.response.status}`,
+                {
+                    cause: error
+                }
+            )
+        }
+
+        if(error.request)
+        {
+            return new Error(`${message} Brak odpowiedzi z serwera.`,
+                {
+                    cause: error
+                }
+            )
+        }
+
+        return new Error(
+            `${message} ${error.message}`,
+            {
+                cause: error
+            }
+        )
+
+
     }
+
+
+    return new Error(message, {cause: error})
 }
+
+
 
 
 
@@ -19,11 +48,18 @@ async function ensureSuccess(response: Response)
 export async function getCars(
     signal? : AbortSignal): Promise<Car[]>
 {
-    const response = await fetch(apiUrl, {signal});
 
-    await ensureSuccess(response);
-
-    return await response.json();
+    try
+    {
+        const response = await appClient.get<Car[]>('/cars', {signal});
+        return response.data;
+    }
+    
+    catch(error)
+    {
+        throw createServiceError(error, "Error while fetching cars.")
+    }
+    
 }
 
 
@@ -33,12 +69,19 @@ export async function getCarById(
     id: string,
     signal?: AbortSignal): Promise<Car>
 {
-    const response = await fetch(`${apiUrl}/${id}`, {signal});
+    try
+    {
+        const response = await appClient.get<Car>(`/cars/${id}`, {signal});
+        return response.data;   
+    }
 
-    await ensureSuccess(response);
-
-    return await response.json();
+    catch(error)
+    {
+        throw createServiceError(error, `Error while fetching car with id: ${id}.`)
+    }
 }
+
+
 
 
 
@@ -48,17 +91,17 @@ export async function createCar(
     car: NewCar
 ): Promise<Car>
 {
-    const response = await fetch(`${apiUrl}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(car)
-    });
+    try
+    {
+        const response = await appClient.post<Car>(`/cars`, car);
+        return response.data;
+    }   
 
-    await ensureSuccess(response);
-
-    return await response.json();
+    catch(error)
+    {
+        throw createServiceError(error, "Error while creating car.")
+    }
+    
 }
 
 
@@ -69,17 +112,17 @@ export async function updateCar(
     car: NewCar
 ): Promise<void>
 {
-    const response = await fetch(`${apiUrl}/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(car)
-    });
+    try
+    {
+        await appClient.put<Car>(`/cars/${id}`, car);
+    }   
 
-    await ensureSuccess(response);
+    catch(error)
+    {
+        throw createServiceError(error, "Error while updating car.")
+    }
 
-    return await response.json();
+    
 }
 
 
@@ -90,9 +133,13 @@ export async function deleteCar(
     id: string
 ): Promise<void>
 {
-    const response = await fetch(`${apiUrl}/${id}`, {
-        method: "DELETE"
-    });
+    try
+    {
+        await appClient.delete<Car>(`/cars/${id}`);
+    }   
 
-    await ensureSuccess(response);
+    catch(error)
+    {
+        throw createServiceError(error, "Error while deleting car.")
+    }
 }
