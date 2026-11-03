@@ -5,6 +5,7 @@
   import CarForm from "../components/CarForm";
   import ApiError from "../components/ApiError";
   import Loading from "../components/Loading";
+import axios from "axios";
 
   function EditCarPage() {
 
@@ -39,9 +40,11 @@
       }
       catch(err)
       {
-        if (err instanceof DOMException && err.name === "AbortError") {
+        //Request has been abroted
+        if(axios.isCancel(error)){
           return;
         }
+        
         if (err instanceof Error) {
           setError(err.message);
         } else {

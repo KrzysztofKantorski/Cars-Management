@@ -1,32 +1,33 @@
-import { NavLink } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink,
-   NavigationMenuList } from './ui/navigation-menu';
+   NavigationMenuList, 
+   navigationMenuTriggerStyle} from './ui/navigation-menu';
 
 function Menu() {
   return (
     <>
     <div className="w-full bg-sky-500/50 mb-[2rem] p-[1rem]">
 
-    
+
         <NavigationMenu>
         <NavigationMenuList>
 
-         <NavigationMenuItem>
-          <NavigationMenuLink >
-            <NavLink to="/">Main page</NavLink>
-          </NavigationMenuLink>
+         <NavigationMenuItem className='mr-[1rem]'>
+          <Link to="/">
+              Main page
+            </Link>
         </NavigationMenuItem>
 
-        <NavigationMenuItem>
-          <NavigationMenuLink >
-            <NavLink to="/cars">Cars</NavLink>
-          </NavigationMenuLink>
+        <NavigationMenuItem className='mr-[1rem]'>
+          <Link to="/cars">
+              Cars
+            </Link>
         </NavigationMenuItem>
 
-        <NavigationMenuItem>
-          <NavigationMenuLink >
-            <NavLink to="/cars/new">Add car</NavLink>
-          </NavigationMenuLink>
+        <NavigationMenuItem className='mr-[1rem]'>
+          <Link to="/cars/new">
+              Add car
+            </Link>
         </NavigationMenuItem>
 
         </NavigationMenuList>

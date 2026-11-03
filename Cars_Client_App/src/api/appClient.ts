@@ -12,7 +12,7 @@ export const appClient = axios.create({
 })
 
 
-    
+
 
 //Axios request interceptor
 appClient.interceptors.request.use(
@@ -24,7 +24,7 @@ appClient.interceptors.request.use(
 
     (error)=>
     {
-        console.error(`[Axios] Request error: ${error}`)
+        return Promise.reject(error);
     }
    
 )
@@ -38,7 +38,7 @@ appClient.interceptors.response.use(
         return response;
     },
     (error)=>{
-        Promise.reject(error)
+        return Promise.reject(error)
     }
 )
 

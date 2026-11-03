@@ -4,6 +4,7 @@ import { deleteCar, getCars } from "../services/carService";
 import Card from "../components/Card";
 import Loading from "../components/Loading";
 import ApiError from "../components/ApiError";
+import axios from "axios";
 
 function CarsPage() {
 
@@ -75,8 +76,7 @@ function CarsPage() {
             catch(error)
             {
                 //Request has been abroted
-                if(error instanceof DOMException && error.name === "AbortError")
-                {
+                if(axios.isCancel(error)){
                     return;
                 }
 

@@ -5,6 +5,7 @@ import { getCarById } from "../services/carService";
 import Loading from "../components/Loading";
 import ApiError from "../components/ApiError";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
+import axios from "axios";
 
 function CarsDetailsPage() {
 
@@ -44,9 +45,8 @@ function CarsDetailsPage() {
       catch(error)
       {
         //Request has been abroted
-        if(error instanceof DOMException && error.name === "AbortError")
-        {
-         return;
+        if(axios.isCancel(error)){
+          return;
         }
         if (error instanceof Error) 
         {

@@ -6,6 +6,14 @@ import axios from "axios";
 //Error handling
 function createServiceError(error: unknown, message: string): Error
 {
+
+    //If request was cancelled
+    if (axios.isCancel(error)) 
+    {
+        return error as Error;
+    }
+
+
     if(axios.isAxiosError(error))
     {
         if(error.response)
@@ -54,9 +62,10 @@ export async function getCars(
         const response = await appClient.get<Car[]>('/cars', {signal});
         return response.data;
     }
-    
+
     catch(error)
     {
+        if (axios.isCancel(error)) throw error;
         throw createServiceError(error, "Error while fetching cars.")
     }
     
@@ -77,6 +86,7 @@ export async function getCarById(
 
     catch(error)
     {
+        if (axios.isCancel(error)) throw error;
         throw createServiceError(error, `Error while fetching car with id: ${id}.`)
     }
 }

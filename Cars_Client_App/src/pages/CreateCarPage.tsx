@@ -4,6 +4,7 @@ import { createCar } from "../services/carService"
 import { useState } from "react";
 import CarForm from "../components/CarForm";
 import ApiError from "../components/ApiError";
+import axios from "axios";
 
 function CreateCarPage() {
   const navigate = useNavigate();
@@ -21,8 +22,7 @@ function CreateCarPage() {
     }
     catch(error){
       //Request has been abroted
-      if(error instanceof DOMException && error.name === "AbortError")
-      {
+      if(axios.isCancel(error)){
         return;
       }
       if (error instanceof Error) 
