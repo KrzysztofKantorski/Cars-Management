@@ -96,7 +96,7 @@ function CarsDetailsPage() {
   return(
     <>
     <div className="flex items-center justify-center w-full min-h-[80vh]">
-      <Table className="w-[50%] ml-[25%] bg-destructive p-[2rem]">
+      <Table className="w-[50%] ml-[25%] bg-ring p-[2rem]">
         <TableCaption>Car {car.id} info</TableCaption>
         <TableHeader>
           <TableRow>

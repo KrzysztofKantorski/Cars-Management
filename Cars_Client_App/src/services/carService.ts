@@ -116,23 +116,12 @@ export async function createCar(
 
 
 
-//Update car
-export async function updateCar(
-    id: string,
-    car: NewCar
-): Promise<void>
-{
-    try
-    {
-        await appClient.put<Car>(`/cars/${id}`, car);
-    }   
-
-    catch(error)
-    {
-        throw createServiceError(error, "Error while updating car.")
-    }
-
-    
+export async function updateCar(id: string, car: NewCar): Promise<void> {
+  try {
+    await appClient.put<Car>(`/cars/${id}`, car);
+  } catch (error) {
+    throw createServiceError(error, "Error while updating car.");
+  }
 }
 
 

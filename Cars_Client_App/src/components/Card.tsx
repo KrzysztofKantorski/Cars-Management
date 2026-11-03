@@ -23,7 +23,7 @@ function Card({ car, onRemove }: CardProps){
   }
   return (
     <>
-   <UiCard className="w-full max-w-sm">
+   <UiCard className="max-w-[250px]">
       <CardHeader>
         <CardTitle>{car.brand}</CardTitle>
         <CardDescription>{car.model}</CardDescription>
@@ -34,7 +34,7 @@ function Card({ car, onRemove }: CardProps){
           Details
         </Button>
 
-        <Button variant="secondary" size="sm"  onClick={() => goToPage(`/cars/${car.id}/edit`)}>
+        <Button variant="outline" size="sm"  onClick={() => goToPage(`/cars/${car.id}/edit`)}>
           Edit
         </Button>
         

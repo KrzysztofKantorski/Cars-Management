@@ -44,7 +44,7 @@ import axios from "axios";
         if(axios.isCancel(error)){
           return;
         }
-        
+
         if (err instanceof Error) {
           setError(err.message);
         } else {
@@ -73,8 +73,7 @@ import axios from "axios";
         catch(error)
         {
           //Request has been abroted
-          if(error instanceof DOMException && error.name === "AbortError")
-          {
+          if(axios.isCancel(error)){
             return;
           }
           if (error instanceof Error) 
