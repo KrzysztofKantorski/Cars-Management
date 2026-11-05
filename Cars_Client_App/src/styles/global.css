@@ -1,10 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* Wskazanie Tailwindowi, że klasa .dark ma wymuszać wariant dark */
+
 @variant dark (&:is(.dark *));
 
-/* Wartości domyślne (LIGHT MODE) */
+
 :root {
   --radius: 0.625rem;
 
@@ -37,7 +37,6 @@
   --ring: #C9B59C;
 }
 
-/* Wartości po dodaniu klasy .dark (DARK MODE) */
 .dark {
   --background: #1E1E1E;
   --foreground: #F9F8F6;
@@ -68,7 +67,7 @@
   --ring: #C9B59C;
 }
 
-/* Mapowanie zmiennych CSS do motywu Tailwinda */
+
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -27,9 +27,7 @@ function CarsPage() {
     //Global state for favorite cars
  
     const searchTerm = useCarUiStore((state)=> state.searchTerm);
-    const setSearchTerm = useCarUiStore((state)=> state.setSearchTerm);
     const showFavoritesOnly = useCarUiStore((state)=> state.showFavoritesOnly);
-    const setShowFavoritesOnly = useCarUiStore((state)=> state.setShowFavoritesOnly);
     const favoriteCarIds = useCarUiStore((state)=> state.favoriteCarIds);
 
     //Remove car from global state
@@ -172,25 +170,6 @@ function CarsPage() {
 
     return (
         <>
-         {/* whenClicked is a property not an event, per se. 
-         
-            <label>
-            <input type="text"
-                placeholder="Search cars..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <input type="checkbox"
-                checked={showFavoritesOnly}
-                onChange={(e) => setShowFavoritesOnly(e.target.checked)}
-            />
-            Show favorites only
-        </label>
-
-         
-         */}
-          
-
             <div className="flex flex-wrap items-center justify-center gap-[2rem] w-[70%] ml-[15%] mt-[5rem] pb-[5rem]">
                 <SearchBar>
                 </SearchBar>    
