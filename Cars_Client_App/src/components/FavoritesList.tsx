@@ -75,7 +75,7 @@ function FavoritesList (){
             controller.abort();
         };
 
-    }, [])
+    }, [favoriteCarIds])
 
 
     //Get only favorite cars
