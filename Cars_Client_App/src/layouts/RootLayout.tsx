@@ -5,7 +5,7 @@ function RootLayout() {
   return (
     <>
     <Menu/>
-    <main>
+    <main className="bg-background text-foreground">
         <Outlet />
     </main>
     </>

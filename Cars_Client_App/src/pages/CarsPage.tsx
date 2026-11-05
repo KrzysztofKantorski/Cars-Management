@@ -6,6 +6,8 @@ import Loading from "../components/Loading";
 import ApiError from "../components/ApiError";
 import axios from "axios";
 import {useCarUiStore} from "../store/useCarUiStore";
+import { Search } from "lucide-react";
+import SearchBar from "../components/SearchBar";
 
 
 
@@ -170,7 +172,9 @@ function CarsPage() {
 
     return (
         <>
-        <label>
+         {/* whenClicked is a property not an event, per se. 
+         
+            <label>
             <input type="text"
                 placeholder="Search cars..."
                 value={searchTerm}
@@ -183,8 +187,13 @@ function CarsPage() {
             Show favorites only
         </label>
 
+         
+         */}
+          
 
             <div className="flex flex-wrap items-center justify-center gap-[2rem] w-[70%] ml-[15%] mt-[5rem] pb-[5rem]">
+                <SearchBar>
+                </SearchBar>    
                 {visibleCars.map((car)=> (
                     <Card
                         key={car.id}

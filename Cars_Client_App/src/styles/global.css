@@ -1,9 +1,75 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* Wskazanie Tailwindowi, że klasa .dark ma wymuszać wariant dark */
+@variant dark (&:is(.dark *));
 
-@theme inline {
+/* Wartości domyślne (LIGHT MODE) */
+:root {
+  --radius: 0.625rem;
+
+  --background: #F9F8F6;
+  --foreground: #2D2B28;
+
+  --card: #EFE9E3;
+  --card-foreground: #2D2B28;
+
+  --popover: #EFE9E3;
+  --popover-foreground: #2D2B28;
+
+  --primary: #C9B59C;
+  --primary-foreground: #1E1E1E;
+
+  --secondary: #D9CFC7;
+  --secondary-foreground: #2D2B28;
+
+  --muted: #EFE9E3;
+  --muted-foreground: #6B655F;
+
+  --accent: #D9CFC7;
+  --accent-foreground: #1E1E1E;
+
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: #F9F8F6;
+
+  --border: #D9CFC7;
+  --input: #D9CFC7;
+  --ring: #C9B59C;
+}
+
+/* Wartości po dodaniu klasy .dark (DARK MODE) */
+.dark {
+  --background: #1E1E1E;
+  --foreground: #F9F8F6;
+
+  --card: #2D2B28;
+  --card-foreground: #F9F8F6;
+
+  --popover: #2D2B28;
+  --popover-foreground: #F9F8F6;
+
+  --primary: #C9B59C;
+  --primary-foreground: #1E1E1E;
+
+  --secondary: #3D3935;
+  --secondary-foreground: #F9F8F6;
+
+  --muted: #3D3935;
+  --muted-foreground: #D9CFC7;
+
+  --accent: #3D3935;
+  --accent-foreground: #F9F8F6;
+
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: #F9F8F6;
+
+  --border: #3D3935;
+  --input: #3D3935;
+  --ring: #C9B59C;
+}
+
+/* Mapowanie zmiennych CSS do motywu Tailwinda */
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -28,55 +94,14 @@
   --radius-lg: var(--radius);
 }
 
-:root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  html, body {
     @apply bg-background text-foreground;
+    min-height: 100vh;
+    width: 100%;
     margin: 0;
     font-family: system-ui, -apple-system, sans-serif;
   }

@@ -12,7 +12,7 @@ function Menu() {
 
   return (
     <>
-    <div className="w-full bg-sky-500/50 mb-[2rem] p-[1rem]">
+    <div className="w-full mb-[2rem] p-[1rem] bg-card border-b text-card-foreground">
 
 
         <NavigationMenu>

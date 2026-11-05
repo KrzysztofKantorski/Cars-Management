@@ -34,13 +34,13 @@ function Card({ car, onRemove }: CardProps){
   }
   return (
     <>
-   <UiCard className="max-w-[250px]">
+   <UiCard className="max-w-[250px] bg-card">
       <CardHeader>
         <CardTitle>{car.brand}</CardTitle>
         <CardDescription>{car.model}</CardDescription>
       </CardHeader>
       
-      <CardFooter className="flex justify-start align-center gap-4 border-t pt-4 bg-sky-500/50 flex-wrap">
+      <CardFooter className="flex justify-start align-center gap-4 border-t pt-4 bg-card flex-wrap">
         <Button variant="outline" size="sm" onClick={() => goToPage(`/cars/${car.id}`)}>
           Details
         </Button>
