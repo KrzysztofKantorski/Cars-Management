@@ -1,10 +1,16 @@
+using Cars.API.Middleware;
+using Cars.API.Services;
 using Cars.Application.Cars;
 using Cars.Application.Common.Behaviors;
+using Cars.Domain;
 using Cars.Infrastructure;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Cars.API.Middleware;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -26,6 +32,56 @@ builder.Services.AddCors(options =>
         .WithOrigins("http://localhost:5174");
     });
 });
+
+
+
+//Register identity service
+builder.Services.AddIdentityCore<AppUser>(options =>
+{
+
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedEmail = true;
+
+    //Password config
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<DataContext>()
+.AddDefaultTokenProviders();
+
+
+
+//Register JWT
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Brak Jwt:Key.");
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            ClockSkew = TimeSpan.FromSeconds(30),
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+
+//Register token service
+builder.Services.AddScoped<ITokenService, TokenService>();
+
 
 
 // Add services to the container.
@@ -64,6 +120,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("CorsPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
