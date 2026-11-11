@@ -1,5 +1,6 @@
 using Cars.API.Middleware;
 using Cars.API.Services;
+using Cars.API.Services.Email;
 using Cars.Application.Cars;
 using Cars.Application.Common.Behaviors;
 using Cars.Domain;
@@ -79,14 +80,26 @@ builder.Services
 builder.Services.AddAuthorization();
 
 
+
+
 //Register token service
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+//Get email settings
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
+
+//Register email service
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
