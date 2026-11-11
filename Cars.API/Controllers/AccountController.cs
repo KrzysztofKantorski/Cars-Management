@@ -46,7 +46,7 @@ namespace Cars.API.Controllers
 
         //User registration
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto dto)
+        public async Task<ActionResult> Register(RegisterDto dto)
         {
             var user = new AppUser
             {
@@ -85,10 +85,10 @@ namespace Cars.API.Controllers
             //Send email
             await _emailService.SendAsync(
                 user.Email!,
-                "Reset hasła Cars",
+                "Aktywacja konta w aplikacji Cars",
                 $"""
                     <h2>Cars</h2>
-                    <p>Kliknij poniższy link, aby ustawić nowe hasło:</p>
+                    <p>Kliknij poniższy link, aby akrywować konto:</p>
                     <p><a href="{resetUrl}">Ustaw nowe hasło</a></p>
                 """
             );
@@ -101,5 +101,181 @@ namespace Cars.API.Controllers
             );
 
         }
+
+
+
+        //User login
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDto>> Login(LoginDto dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email.Trim());
+
+            if(user is null)
+            {
+                return Unauthorized("Incorrect email or password.");
+            }
+
+            //Check if password is correct
+            var passwordCorrect = await _userManager.CheckPasswordAsync(user, dto.Password);
+
+            if (!passwordCorrect)
+            {
+                return Unauthorized("Incorrect email or password.");
+            }
+
+
+            //Check if user email address is verified
+            if (!user.EmailConfirmed)
+            {
+                return Unauthorized("Email address not verified");
+            }
+
+            return Ok(await CreateUserDtoAsync(user));
+        }
+
+
+
+        //Email confirmation
+        public async Task<ActionResult> ConfirmEmail(
+            string userId, 
+            string token
+            )
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if(user is null)
+            {
+                return BadRequest("Nieprawidłowy użytkownik.");
+            }
+
+            string decodedToken;
+
+            try
+            {
+                decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+            }
+            catch
+            {
+                return BadRequest("Incorrect token.");
+            }
+
+
+            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("Cound not confirm email.");
+            }
+
+
+            return Ok(
+               new
+               {
+                   message = "Email confirmed."
+               }
+            );
+
+        }
+
+
+
+        //Forgot password case
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordDto dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email.Trim());
+
+            if (user is null)
+            {
+                return Unauthorized("Incorrect email or password.");
+            }
+
+            //Check if user email address is verified
+            if (!user.EmailConfirmed)
+            {
+                return Unauthorized("Email address not verified");
+            }
+
+
+            //Generate password reset token
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            //Build email confirmation url
+            var clientBaseUrl = _configuration["Client:BaseUrl"]
+                ?? throw new InvalidOperationException("Missing Client:BaseUrl.");
+
+            var resetUrl =
+                $"{clientBaseUrl}/confirm-email"
+                + $"?userId={Uri.EscapeDataString(user.Id)}"
+                + $"&token={Uri.EscapeDataString(encodedToken)}";
+
+            //Send email
+            await _emailService.SendAsync(
+                user.Email!,
+                "Reset hasła Cars",
+                $"""
+                    <h2>Cars</h2>
+                    <p>Kliknij poniższy link, aby ustawić nowe hasło:</p>
+                    <p><a href="{resetUrl}">Ustaw nowe hasło</a></p>
+                """
+            );
+
+            return Ok(
+                new
+                {
+                    message = "Confirmation email has been sent to your email address."
+                }
+            );
+
+
+        }
+
+
+
+
+
+        //Password reset
+        [HttpPost("reset-password")]
+        public async Task<ActionResult> ResetPassword(ResetPasswordDto dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email.Trim());
+
+            if(user is null)
+            {
+                return BadRequest("Could not reset password");
+            }
+
+
+            string decodedToken;
+
+            try
+            {
+                decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(dto.Token));
+            }
+            catch
+            {
+                return BadRequest("Incorrect token.");
+            }
+
+
+            var result = await _userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors.Select(error => error.Description));
+            }
+
+
+            return Ok(
+                new
+                {
+                    message = "Password has been changed"
+                }
+            );
+
+        }
+
+
     }
 }
