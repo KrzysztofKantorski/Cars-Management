@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useAuthStore } from "../store/useAuthStore";
 
 
 //Axios config
@@ -18,7 +19,13 @@ export const appClient = axios.create({
 appClient.interceptors.request.use(
     (config)=>
     {
-        console.log(`[Axios] ${config.method?.toUpperCase()} ${config.url}`)
+        const user = useAuthStore.getState().user;
+
+        //Add token if missing
+        if(user?.token){
+            config.headers.Authorization = `Bearer ${user.token}`
+        }
+        
         return config;
     },
 
@@ -33,12 +40,17 @@ appClient.interceptors.request.use(
 
 //Axios response interceptor
 appClient.interceptors.response.use(
-    (response)=>{
-        console.log(`[Axios] ${response.status} ${response.config.url}`)
-        return response;
-    },
+    (response)=>response,
     (error)=>{
-        return Promise.reject(error)
+
+        //Token expired
+        if (error.response?.status === 401) {
+            useAuthStore
+            .getState()
+            .logout();
+        }
+
+        return Promise.reject(error);
     }
 )
 
