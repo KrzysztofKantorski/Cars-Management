@@ -144,7 +144,27 @@ app.UseMiddleware<ApiExceptionMiddleware>();
 
 using var scope = app.Services.CreateScope();
 
+
+
+
 var services = scope.ServiceProvider;
+
+
+
+
+//UserManager
+var userManager = services.GetRequiredService<
+ UserManager<AppUser>>();
+
+//Role manager
+var roleManager = services.GetRequiredService <
+ RoleManager<IdentityRole>>();
+
+
+await IdentitySeed.SeedAsync(
+    userManager,
+    roleManager
+);
 
 
 //Create migration when app starts
