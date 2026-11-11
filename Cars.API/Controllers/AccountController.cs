@@ -136,6 +136,7 @@ namespace Cars.API.Controllers
 
 
         //Email confirmation
+        [HttpPost("confirm-email")]
         public async Task<ActionResult> ConfirmEmail(
             string userId, 
             string token
@@ -180,6 +181,7 @@ namespace Cars.API.Controllers
 
 
         //Forgot password case
+        [HttpPost("forgot-password")]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordDto dto)
         {
             var user = await _userManager.FindByEmailAsync(dto.Email.Trim());
@@ -206,9 +208,9 @@ namespace Cars.API.Controllers
                 ?? throw new InvalidOperationException("Missing Client:BaseUrl.");
 
             var resetUrl =
-                $"{clientBaseUrl}/confirm-email"
+                $"{clientBaseUrl}/reset-password"
                 + $"?userId={Uri.EscapeDataString(user.Id)}"
-                + $"&token={Uri.EscapeDataString(encodedToken)}";
+                + $"&token={encodedToken}";
 
             //Send email
             await _emailService.SendAsync(
@@ -259,7 +261,7 @@ namespace Cars.API.Controllers
             }
 
 
-            var result = await _userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, dto.NewPassword);
 
             if (!result.Succeeded)
             {

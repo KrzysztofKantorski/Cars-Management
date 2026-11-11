@@ -10,6 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +31,7 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyHeader()
         .AllowAnyMethod()
-        .WithOrigins("http://localhost:5174");
+        .WithOrigins("http://localhost:5173");
     });
 });
 
@@ -88,6 +89,9 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 //Get email settings
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Smtp"));
 
+builder.Services.AddSingleton(resolver =>
+    resolver.GetRequiredService<IOptions<EmailSettings>>().Value);
+
 //Register email service
 builder.Services.AddScoped<IEmailService, EmailService>();
 
@@ -136,11 +140,13 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+
 
 
 //Middleware
 app.UseMiddleware<ApiExceptionMiddleware>();
+
+app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 
