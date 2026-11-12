@@ -9,7 +9,7 @@ import {useCarUiStore} from "../store/useCarUiStore";
 import SearchBar from "../components/SearchBar";
 import { useAuthStore } from "../store/useAuthStore";
 
-
+const EMPTY_FAVORITES: string[] = [];
 
 function CarsPage() {
 
@@ -22,19 +22,22 @@ function CarsPage() {
     //loading state
     const [loading, setLoading] = useState<boolean>(true);
 
-
+    
 
     //Global state for favorite cars
  
     const searchTerm = useCarUiStore((state)=> state.searchTerm);
     const showFavoritesOnly = useCarUiStore((state)=> state.showFavoritesOnly);
    
-    const user =useAuthStore((state) => state.user,);
+    const user =useAuthStore((state) => state.user);
+
+    const isAdmin = user?.roles?.includes("Admin") ?? false;
+
     const favoriteCarIdsByUser =useCarUiStore((state) => state.favoriteCarIdsByUser);
-    const favoriteCarIds = user? favoriteCarIdsByUser[user.id] ?? []: [];
+    const favoriteCarIds= user ? (favoriteCarIdsByUser[user.id] ?? EMPTY_FAVORITES) : EMPTY_FAVORITES;
     //Remove car from global state
     const removeFavorite = useCarUiStore(
-        (state) => state.removeFavorite
+        (state) => state.removeCarFromAllFavorites
     );
 
     //Normalize search query
@@ -69,15 +72,18 @@ function CarsPage() {
             {
                 return;
             }
+            if(isAdmin){
+                //Call service method
+                await deleteCar(id);
 
-            //Call service method
-            await deleteCar(id);
+                //Remove from favorites
+                removeFavorite(id); 
 
-            //Remove from favorites
-            if (user) { removeFavorite(user.id, id); }
-
-            //Update car list
-            setCars((prevCars)=> prevCars.filter(car => car.id != id));
+                //Update car list
+                setCars((prevCars)=> prevCars.filter(car => car.id != id));
+            }
+        
+            
         }
 
         catch(err)
@@ -179,7 +185,7 @@ function CarsPage() {
                     <Card
                         key={car.id}
                         car={car}
-                        onRemove={removeCar}
+                        onRemove={isAdmin ? removeCar : undefined}
                     />
                 ))}
             </div>

@@ -8,6 +8,7 @@ import { useCarUiStore } from "../store/useCarUiStore";
 import { Button } from "./ui/button";
 import { useAuthStore } from "../store/useAuthStore";
 
+const EMPTY_FAVORITES: string[] = [];
 function FavoritesList (){
   
     const user =useAuthStore((state) => state.user,);
@@ -29,7 +30,7 @@ function FavoritesList (){
       state.favoriteCarIdsByUser,
     );
 
-    const favoriteCarIds = user ? favoriteCarIdsByUser[user.id] ?? []: [];
+    const favoriteCarIds = user ? (favoriteCarIdsByUser[user.id] ?? EMPTY_FAVORITES) : EMPTY_FAVORITES;
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -84,13 +85,13 @@ function FavoritesList (){
             controller.abort();
         };
 
-    }, [favoriteCarIds])
+    }, [])
 
 
     //Get only favorite cars
-    const favoriteCars = cars.filter((car)=>{
+   const favoriteCars = cars.filter((car)=>{
+        const matchesFavorite = favoriteCarIds.includes(car.id);
 
-        const matchesFavorite =  favoriteCarIds.includes(car.id);
         return matchesFavorite;
 
     })

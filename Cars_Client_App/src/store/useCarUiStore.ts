@@ -65,6 +65,19 @@ export const useCarUiStore = create<CarUiStore>()(
                     [userId]: [],
                     },
                 })),
+
+            removeCarFromAllFavorites: (carId: string) =>
+            set((state) => {
+                const updatedFavoritesByUser: Record<string, string[]> = {};
+
+                for (const [uid, carIds] of Object.entries(state.favoriteCarIdsByUser)) {
+                updatedFavoritesByUser[uid] = carIds.filter((id) => id !== carId);
+                }
+
+                return {
+                favoriteCarIdsByUser: updatedFavoritesByUser,
+                };
+            }),
         }),
         {
             name: 'car-ui-store',

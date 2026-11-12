@@ -37,7 +37,7 @@ export async function confirmEmail(
 ): Promise<string>
 {
     const response = await appClient.post<{message: string}>(
-        '/account/confirm-email',
+        '/account/confirm-email',null,
         {
             params: 
             {

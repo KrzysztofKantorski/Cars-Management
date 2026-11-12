@@ -6,6 +6,7 @@ import { Field, FieldLabel } from "../components/ui/field";
 import { Input } from "../components/ui/input";
 
 import { AuthForm } from "../components/AuthForm";
+import axios from "axios";
 
 
 export default function RegisterPage(){
@@ -41,20 +42,18 @@ export default function RegisterPage(){
             setIsSubmitting(true);
             setError(null)
             await register({userName, email, password});
-            navigate("/confirm-email");
         }
 
-        catch(err)
-        {
-            if (err instanceof Error) 
-            {
-                setError(err.message);
-            }
-    
-            else{
-                setError("Could not login")
-            }
+        catch (err) {
+        if (axios.isAxiosError(err) && err.response?.data) {
+            const data = err.response.data;
+            setError(Array.isArray(data) ? data.join(" ") : String(data));
+        } else if (err instanceof Error) {
+            setError(err.message);
+        } else {
+            setError("Could not register");
         }
+}
 
         finally{
             setIsSubmitting(false);
