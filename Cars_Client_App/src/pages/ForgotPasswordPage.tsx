@@ -28,7 +28,6 @@ export default function ForgotPasswordPage()
             setIsSubmitting(true);
             setError(null)
             await forgotPassword(email);
-            navigate("/reset-password");
         }
 
         catch(err)

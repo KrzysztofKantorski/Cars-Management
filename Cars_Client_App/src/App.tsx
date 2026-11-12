@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import RegisterPage from './pages/RegisterPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 function App() {
   return (
@@ -31,7 +32,12 @@ function App() {
         path="forgot-password"
         element={<ForgotPasswordPage />}
       />
-      
+
+       <Route
+        path="reset-password"
+        element={<ResetPasswordPage />}
+      />
+
       <Route element={<ProtectedRoute />}>
         <Route path="cars">
           <Route index element={<CarsPage />} />
