@@ -2,7 +2,7 @@ import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router";
 import { forgotPassword } from "../services/authService";
 import ApiError from "../components/ApiError";
-import { Field, FieldGroup, FieldLabel, FieldSet } from "../components/ui/field";
+import { Field, FieldLabel } from "../components/ui/field";
 import { Input } from "../components/ui/input";
 import { AuthForm } from "../components/AuthForm";
 
@@ -28,7 +28,7 @@ export default function ForgotPasswordPage()
             setIsSubmitting(true);
             setError(null)
             await forgotPassword(email);
-            navigate("/cars");
+            navigate("/reset-password");
         }
 
         catch(err)
@@ -54,7 +54,7 @@ export default function ForgotPasswordPage()
     return(
         <div className="w-full flex flex-col items-center justify-start pt-[8rem] gap-[3rem]">
 
-            <h1>Change password</h1>
+            <h1>Forgot password</h1>
             {error && <ApiError message={`${error}`}></ApiError>}
 
            <AuthForm

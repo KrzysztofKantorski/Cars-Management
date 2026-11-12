@@ -2,9 +2,9 @@ import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router";
 import { register } from "../services/authService";
 import ApiError from "../components/ApiError";
-import { Field, FieldGroup, FieldLabel, FieldSet } from "../components/ui/field";
+import { Field, FieldLabel } from "../components/ui/field";
 import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+
 import { AuthForm } from "../components/AuthForm";
 
 
