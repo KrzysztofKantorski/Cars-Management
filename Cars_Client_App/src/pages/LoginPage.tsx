@@ -3,7 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import ApiError from "../components/ApiError";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "../components/ui/field";
-import { Input } from "@base-ui/react/input";
+import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { login } from "../services/authService";
 
@@ -67,12 +67,12 @@ export default function LoginPage(){
 
 
     return(
-        <div>
+        <div className="w-full flex flex-col items-center justify-start mt-[8rem] gap-[3rem]">
             <h1>Login</h1>
 
             {error && <ApiError message={`${error}`}></ApiError>}
 
-            <form onSubmit={handleSubmit} className="flex flex-col w-full max-w-3xl space-y-6 bg-card p-[2rem] rounded-md bg-card">
+            <form onSubmit={handleSubmit} className="flex flex-col w-[30%] max-w-3xl space-y-6 bg-card p-[2rem] rounded-md bg-card">
                 <FieldSet className="w-full" >
                      <FieldGroup>
                         <Field>
@@ -91,15 +91,16 @@ export default function LoginPage(){
             </form>
 
 
-            
-            <Button variant="outline" size="sm" onClick={() => goToPage(`/forgot-password`)}>
-                Forgot password?
-            </Button>
+            <div className="flex gap-[2rem]">
+                <Button variant="outline" size="sm" onClick={() => goToPage(`/forgot-password`)}>
+                    Forgot password?
+                </Button>
 
-            <Button variant="outline" size="sm" onClick={() => goToPage(`/register`)}>
-                Register
-            </Button>
-
+                <Button variant="outline" size="sm" onClick={() => goToPage(`/register`)}>
+                    Register
+                </Button>
+            </div>
+        
         </div>
     );
 }
