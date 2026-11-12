@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card"
+import { useAuthStore } from '../store/useAuthStore';
 
 interface CardProps {
   car: Car;
@@ -17,12 +18,16 @@ interface CardProps {
 
 function Card({ car, onRemove }: CardProps){ 
   const navigate = useNavigate();
-
+  const user = useAuthStore((state) => state.user);
+  
   //Check if car is in favorites
-  const isFavorite = useCarUiStore(
-    (state)=> state.favoriteCarIds.includes(car.id)
+  const favoriteCarIdsByUser = useCarUiStore((state) =>
+    state.favoriteCarIdsByUser,
   );
 
+  const favoriteCarIds = user ? favoriteCarIdsByUser[user.id] ?? []: [];
+
+  const isFavorite =favoriteCarIds.includes(car.id);
 
   const toggleFavorite = useCarUiStore(
     (state) => state.toggleFavorite
@@ -60,7 +65,7 @@ function Card({ car, onRemove }: CardProps){
         )}
 
 
-        <Button variant="outline" size="sm"  onClick={() => toggleFavorite(car.id)}>
+        <Button variant="outline" size="sm"  onClick={() => {if (user) { toggleFavorite(user.id, car.id); }}}>
           {isFavorite ? "Remove from favorites" : "Add to favorites"}
         </Button>
       </CardFooter>

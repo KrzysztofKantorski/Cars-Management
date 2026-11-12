@@ -1,10 +1,12 @@
 export interface CarUiStore {
-    searchTerm: string;
-    showFavoritesOnly: boolean;
-    favoriteCarIds: string[];
-    setSearchTerm: (value: string)=> void;
-    setShowFavoritesOnly: (value: boolean)=> void;
-    toggleFavorite: (id: string)=> void;
-    removeFavorite: (id: string)=> void;
-    clearFavorites: ()=> void;
+   searchTerm: string;
+showFavoritesOnly: boolean;
+favoriteCarIdsByUser:
+Record<string, string[]>;
+
+setSearchTerm:(value: string) => void;
+setShowFavoritesOnly:(value: boolean) => void;
+toggleFavorite:(userId: string,carId: string,) => void;
+removeFavorite:(userId: string, carId: string,) => void;
+clearFavorites:(userId: string) => void;
 }

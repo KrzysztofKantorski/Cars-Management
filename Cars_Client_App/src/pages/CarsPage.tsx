@@ -6,8 +6,8 @@ import Loading from "../components/Loading";
 import ApiError from "../components/ApiError";
 import axios from "axios";
 import {useCarUiStore} from "../store/useCarUiStore";
-import { Search } from "lucide-react";
 import SearchBar from "../components/SearchBar";
+import { useAuthStore } from "../store/useAuthStore";
 
 
 
@@ -28,8 +28,10 @@ function CarsPage() {
  
     const searchTerm = useCarUiStore((state)=> state.searchTerm);
     const showFavoritesOnly = useCarUiStore((state)=> state.showFavoritesOnly);
-    const favoriteCarIds = useCarUiStore((state)=> state.favoriteCarIds);
-
+   
+    const user =useAuthStore((state) => state.user,);
+    const favoriteCarIdsByUser =useCarUiStore((state) => state.favoriteCarIdsByUser);
+    const favoriteCarIds = user? favoriteCarIdsByUser[user.id] ?? []: [];
     //Remove car from global state
     const removeFavorite = useCarUiStore(
         (state) => state.removeFavorite
@@ -72,7 +74,7 @@ function CarsPage() {
             await deleteCar(id);
 
             //Remove from favorites
-            removeFavorite(id);
+            if (user) { removeFavorite(user.id, id); }
 
             //Update car list
             setCars((prevCars)=> prevCars.filter(car => car.id != id));
