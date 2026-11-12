@@ -209,7 +209,7 @@ namespace Cars.API.Controllers
 
             var resetUrl =
                 $"{clientBaseUrl}/reset-password"
-                + $"?userId={Uri.EscapeDataString(user.Id)}"
+                + $"?email={Uri.EscapeDataString(user.Email!)}"
                 + $"&token={encodedToken}";
 
             //Send email
