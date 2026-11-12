@@ -6,6 +6,7 @@ import { Field, FieldGroup, FieldLabel, FieldSet } from "../components/ui/field"
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { login } from "../services/authService";
+import { AuthForm } from "../components/AuthForm";
 
 export default function LoginPage(){
     const navigate = useNavigate();
@@ -72,23 +73,22 @@ export default function LoginPage(){
 
             {error && <ApiError message={`${error}`}></ApiError>}
 
-            <form onSubmit={handleSubmit} className="flex flex-col w-[30%] max-w-3xl space-y-6 bg-card p-[2rem] rounded-md bg-card">
-                <FieldSet className="w-full" >
-                     <FieldGroup>
-                        <Field>
-                            <FieldLabel htmlFor="email">Email</FieldLabel>
-                            <Input autoComplete="off" placeholder="type..." name="email" type="text" value={email} onChange={handleEmailChange} required/>
-                        </Field>
+            <AuthForm
+                onSubmit={handleSubmit}
+                isSubmitting={isSubmitting}
+                submitText="Login"
+                submittingText="Logging..."
+            >
+                <Field>
+                    <FieldLabel htmlFor="email">Email</FieldLabel>
+                    <Input id="email" name="email" type="email" value={email} onChange={handleEmailChange} required />
+                </Field>
 
-                        <Field>
-                            <FieldLabel htmlFor="password">Password</FieldLabel>
-                            <Input autoComplete="off" placeholder="type..." name="password" type="text" value={password} onChange={handlePasswordChange} required/>
-                        </Field>
-
-                         <Button type="submit" variant="outline" className="w-[30%] ml-[35%] text-center mt-[2rem]">{isSubmitting? 'Logging...': 'Login'}</Button>
-                     </FieldGroup>
-                </FieldSet>
-            </form>
+                <Field>
+                    <FieldLabel htmlFor="password">Password</FieldLabel>
+                    <Input id="password" name="password" type="password" value={password} onChange={handlePasswordChange} required />
+                </Field>
+            </AuthForm>
 
 
             <div className="flex gap-[2rem]">
