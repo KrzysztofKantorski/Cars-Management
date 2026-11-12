@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import { useRef, useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router";
 import { register } from "../services/authService";
 import ApiError from "../components/ApiError";
@@ -15,8 +15,9 @@ export default function RegisterPage(){
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [message, setMessage] = useState<string>("");
     const navigate = useNavigate();
-
+    
     function handleEmailChange(event: ChangeEvent<HTMLInputElement>) 
     {
         setEmail(event.target.value);
@@ -41,7 +42,8 @@ export default function RegisterPage(){
         try{
             setIsSubmitting(true);
             setError(null)
-            await register({userName, email, password});
+            const successMsg = await register({ userName, email, password });
+            setMessage(successMsg);
         }
 
         catch (err) {
@@ -89,6 +91,8 @@ export default function RegisterPage(){
                     <Input id="password" name="password" type="password" value={password} onChange={handlePasswordChange} required />
                 </Field>
             </AuthForm>
+
+            {message && <p className="text-sm text-green-500 font-medium">{message}</p>}
         </div>
     )
 

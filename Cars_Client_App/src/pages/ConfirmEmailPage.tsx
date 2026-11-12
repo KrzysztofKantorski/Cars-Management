@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { confirmEmail } from "../services/authService";
+import axios from "axios";
 
 
 export default function ConfirmEmailPage(){
@@ -10,22 +11,37 @@ export default function ConfirmEmailPage(){
 
     const [message, setMessage] = useState('Confirming account...');
 
-
+    const hasRequested = useRef(false);
     useEffect(()=>{
-        if(!userId || !token)
-        {
-           return;
+        if (!userId || !token || hasRequested.current) {
+            return;
         }
+        hasRequested.current = true;
 
-        async function confirm(){
-            try{
-                const result = await confirmEmail(userId!, token!);
-                setMessage(result);
-            }
-            catch{
-                setMessage("Could not confirm account");
-            }
+        async function confirm() {
+    try {
+      const result = await confirmEmail(userId!, token!);
+      setMessage(result);
+    } catch (err) {
+      // Jeśli to błąd sieciowy przy otwieraniu nowej karty (brak odpowiedzi z serwera), ponów raz po 300ms
+      if (axios.isAxiosError(err) && !err.response) {
+        try {
+          await new Promise((r) => setTimeout(r, 300));
+          const retryResult = await confirmEmail(userId!, token!);
+          setMessage(retryResult);
+          return;
+        } catch {
+          // Przejdź do wyświetlenia błędu niżej
         }
+      }
+
+      if (axios.isAxiosError(err) && err.response?.data) {
+        setMessage(String(err.response.data));
+      } else {
+        setMessage("Could not confirm account");
+      }
+     }
+    }
 
         confirm();
     }, [userId, token])
