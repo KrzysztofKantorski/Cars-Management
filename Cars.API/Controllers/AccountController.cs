@@ -142,11 +142,16 @@ namespace Cars.API.Controllers
             string token
             )
         {
-            var user = await _userManager.FindByIdAsync(userId);
 
-            if(user is null)
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
             {
-                return BadRequest("Nieprawidłowy użytkownik.");
+                return BadRequest("Incorrect user.");
+            }
+
+            if (user.EmailConfirmed)
+            {
+                return Ok(new { message = "Email confirmed." });
             }
 
             string decodedToken;
