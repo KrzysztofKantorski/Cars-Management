@@ -135,6 +135,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//Middleware
+app.UseMiddleware<ApiExceptionMiddleware>();
 app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
@@ -143,8 +145,6 @@ app.UseAuthorization();
 
 
 
-//Middleware
-app.UseMiddleware<ApiExceptionMiddleware>();
 
 app.MapControllers();
 
