@@ -6,9 +6,12 @@ import Loading from "./Loading";
 import ApiError from "./ApiError";
 import { useCarUiStore } from "../store/useCarUiStore";
 import { Button } from "./ui/button";
+import { useAuthStore } from "../store/useAuthStore";
 
+const EMPTY_FAVORITES: string[] = [];
 function FavoritesList (){
-    
+  
+    const user =useAuthStore((state) => state.user,);
     //Set cars state
     const [cars, setCars] = useState<Car[]>([])
     //Error state
@@ -17,10 +20,17 @@ function FavoritesList (){
     //loading state
     const [loading, setLoading] = useState<boolean>(true);
 
-    //Global state for favorite cars
-    const favoriteCarIds = useCarUiStore((state)=> state.favoriteCarIds);
+    const favoriteCount =useCarUiStore(
+      (state) => 
+        user ? (state.favoriteCarIdsByUser[user.id] ?? []).length: 0,
+    );
 
-    const favoritesCount = favoriteCarIds.length
+    //Check if car is in favorites
+    const favoriteCarIdsByUser = useCarUiStore((state) =>
+      state.favoriteCarIdsByUser,
+    );
+
+    const favoriteCarIds = user ? (favoriteCarIdsByUser[user.id] ?? EMPTY_FAVORITES) : EMPTY_FAVORITES;
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -75,13 +85,13 @@ function FavoritesList (){
             controller.abort();
         };
 
-    }, [favoriteCarIds])
+    }, [])
 
 
     //Get only favorite cars
-    const favoriteCars = cars.filter((car)=>{
+   const favoriteCars = cars.filter((car)=>{
+        const matchesFavorite = favoriteCarIds.includes(car.id);
 
-        const matchesFavorite =  favoriteCarIds.includes(car.id);
         return matchesFavorite;
 
     })
@@ -105,12 +115,12 @@ function FavoritesList (){
         onClick={() => setIsOpen(!isOpen)}
         className="shrink-0"
       >
-        Favorites: {favoritesCount}
+        Favorites: {favoriteCount}
       </Button>
 
       {isOpen && (
         <div className="absolute right-0 mt-4 w-64 bg-popover text-popover-foreground border border-border rounded-lg shadow-lg p-2 z-50 flex flex-col gap-2">
-          {favoritesCount== 0 ? (
+          {favoriteCount== 0 ? (
             <p className="text-sm text-muted-foreground p-2 text-center">
               No favorites yet
             </p>

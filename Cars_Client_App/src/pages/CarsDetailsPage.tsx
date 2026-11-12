@@ -7,11 +7,11 @@ import ApiError from "../components/ApiError";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
 import axios from "axios";
 
+
 function CarsDetailsPage() {
 
   //Get id param from route
   const { id } = useParams();
-
   if(!id)
   {
     return <ApiError message={"No id was provided"}/>

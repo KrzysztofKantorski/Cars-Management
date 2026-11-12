@@ -10,6 +10,8 @@ import LoginPage from './pages/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import RegisterPage from './pages/RegisterPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import ResetPasswordPage from './pages/ResetPasswordPage'
+import ConfirmEmailPage from './pages/ConfirmEmailPage'
 
 function App() {
   return (
@@ -31,7 +33,17 @@ function App() {
         path="forgot-password"
         element={<ForgotPasswordPage />}
       />
-      
+
+       <Route
+        path="reset-password"
+        element={<ResetPasswordPage />}
+      />
+
+       <Route
+        path="confirm-email"
+        element={<ConfirmEmailPage />}
+      />
+
       <Route element={<ProtectedRoute />}>
         <Route path="cars">
           <Route index element={<CarsPage />} />
