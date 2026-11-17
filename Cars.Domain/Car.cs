@@ -32,5 +32,8 @@ public class Car
     public DateTime ProductionDate { get; set; }
     public double AverageFuelConsumption { get; set; }
     public BodyType BodyType { get; set; }
+
+    //Entity framework relation
+    public ICollection<CarPhoto> Photos { get; set; } = new List<CarPhoto>();
 }
 
