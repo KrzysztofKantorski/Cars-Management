@@ -33,7 +33,10 @@ public class Car
     public double AverageFuelConsumption { get; set; }
     public BodyType BodyType { get; set; }
 
-    //Entity framework relation
+    //Entity framework relation with photos
     public ICollection<CarPhoto> Photos { get; set; } = new List<CarPhoto>();
+
+    //Entity framework relation with features
+    public ICollection<Feature> Features { get; set; } = new List<Feature>();  
 }
 
