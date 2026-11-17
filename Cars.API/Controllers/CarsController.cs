@@ -200,5 +200,43 @@ namespace Cars.API.Controllers
             return CreatedAtAction(nameof(GetCar), new { id }, result);
         }
 
+
+
+
+        //Delete car photo
+        [Authorize(Roles ="Admin")]
+        [HttpDelete("{id:guid}/photos/{photoId:guid}")]
+        public async Task<IActionResult> DeletePhoto(
+            Guid id, 
+            Guid photoId, 
+            CancellationToken cancellationToken)
+        {
+            //Get file metadata
+            var fileName = await _sender.Send(new DeleteCarPhoto.Command
+            {
+                CarId = id,
+                PhotoId = photoId,
+            });
+
+            if(fileName is null)
+            {
+                return NotFound();
+            }
+
+            var webRootPath = _environment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory
+                (), "wwwroot");
+
+            //File directory
+            var filePath = Path.Combine(webRootPath, "uploads", "cars", fileName);
+
+            //Remove file
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+            return NoContent();
+        }
+
     }
 }
