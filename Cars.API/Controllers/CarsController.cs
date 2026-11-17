@@ -1,4 +1,5 @@
 ﻿using Cars.Application.Cars;
+using Cars.Application.Cars.DTOs;
 using Cars.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +23,7 @@ namespace Cars.API.Controllers
 
         //Get all cars
         [HttpGet]
-        public async Task<ActionResult<List<Car>>> GetCars()
+        public async Task<ActionResult<List<CarDto>>> GetCars()
         {
 
             return await _sender.Send(new GetCarsList.Query());
@@ -32,7 +33,7 @@ namespace Cars.API.Controllers
 
         //Get car by id
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<Car>> GetCar(Guid id)
+        public async Task<ActionResult<CarDto>> GetCar(Guid id)
         {
             var car =  await _sender.Send(new Details.Query { Id = id});
 
