@@ -102,5 +102,25 @@ namespace Cars.API.Controllers
 
             return NoContent();
         }
+
+
+
+        //Update car features
+        [HttpPut("{id: guid}/features")]
+        public async Task<IActionResult> UpdateFeatures(Guid id, UpdateCarFeaturesDto dto)
+        {
+            var result = await _sender.Send(new UpdateCarFeatures.Command
+            {
+                CarId = id,
+                FeatureIds = dto.FeatureIds
+            });
+
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
     }
 }
