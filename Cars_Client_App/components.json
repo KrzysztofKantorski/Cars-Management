@@ -11,11 +11,14 @@
     "prefix": ""
   },
   "aliases": {
-   "components": "@/components",
+    "components": "@/components",
     "utils": "@/lib/utils",
     "ui": "@/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "iconLibrary": "lucide"
+  "iconLibrary": "lucide",
+  "registries": {
+    "@magicui": "https://magicui.design/r/{name}"
+  }
 }
