@@ -135,6 +135,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
 //Middleware
 app.UseMiddleware<ApiExceptionMiddleware>();
 app.UseCors("CorsPolicy");
