@@ -181,6 +181,7 @@ try
 
     //Seed data
     await Seed.SeedData(context);
+    await FeatureSeed.SeedAsync(context);
 }
 catch(Exception ex)
 {
