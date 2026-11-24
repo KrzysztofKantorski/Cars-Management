@@ -135,6 +135,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStaticFiles();
 //Middleware
 app.UseMiddleware<ApiExceptionMiddleware>();
 app.UseCors("CorsPolicy");
@@ -181,6 +182,7 @@ try
 
     //Seed data
     await Seed.SeedData(context);
+    await FeatureSeed.SeedAsync(context);
 }
 catch(Exception ex)
 {

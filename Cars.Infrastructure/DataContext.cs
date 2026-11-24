@@ -15,5 +15,23 @@ namespace Cars.Infrastructure
 
         //Declare first dbSet
         public DbSet<Car> Cars => Set<Car>();
+        public DbSet<Feature> Features => Set<Feature>();
+        public DbSet<CarPhoto> CarPhotos => Set<CarPhoto>();
+
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Car>()
+                .HasMany(car => car.Features)
+                .WithMany(feature => feature.Cars)
+                .UsingEntity(join => join.ToTable("CarFeatures"));
+        }
     }
+
+
+
+
 }
