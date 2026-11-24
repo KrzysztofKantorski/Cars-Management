@@ -1,115 +1,62 @@
-import { useEffect, useState } from "react";
-import type { Car } from "../models/Car";
+import { useState } from "react";
 import { getCars } from "../services/carService";
-import axios from "axios";
 import Loading from "./Loading";
 import ApiError from "./ApiError";
 import { useCarUiStore } from "../store/useCarUiStore";
 import { Button } from "./ui/button";
 import { useAuthStore } from "../store/useAuthStore";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "../queries/queryKeys";
 
 const EMPTY_FAVORITES: string[] = [];
 function FavoritesList (){
   
-    const user =useAuthStore((state) => state.user,);
-    //Set cars state
-    const [cars, setCars] = useState<Car[]>([])
-    //Error state
-    const [error, setError] = useState<string | null>(null);
+  const user =useAuthStore((state) => state.user,);
+  const [isOpen, setIsOpen] = useState(false);
 
-    //loading state
-    const [loading, setLoading] = useState<boolean>(true);
+  //Get cars
+  const {
+  data: cars = [],
+  isPending,
+  isError,
+  error,
+  } = useQuery({
+    queryKey: queryKeys.cars,
+    queryFn: ({ signal }) => getCars(signal),
+  });
 
-    const favoriteCount =useCarUiStore(
-      (state) => 
-        user ? (state.favoriteCarIdsByUser[user.id] ?? []).length: 0,
-    );
+  const favoriteCount =useCarUiStore(
+    (state) => 
+      user ? (state.favoriteCarIdsByUser[user.id] ?? []).length: 0,
+  );
 
-    //Check if car is in favorites
-    const favoriteCarIdsByUser = useCarUiStore((state) =>
-      state.favoriteCarIdsByUser,
-    );
+  //Check if car is in favorites
+  const favoriteCarIdsByUser = useCarUiStore((state) =>
+    state.favoriteCarIdsByUser,
+  );
 
-    const favoriteCarIds = user ? (favoriteCarIdsByUser[user.id] ?? EMPTY_FAVORITES) : EMPTY_FAVORITES;
-
-    const [isOpen, setIsOpen] = useState(false);
-
-    useEffect(()=>{
-        const controller = new AbortController();
-
-        //Get data
-        async function loadCars(){
-            try{
-                setLoading(true);
-                setError(null);
-
-                //get cars from service method
-                const loadedCars = await getCars(controller.signal);
-
-                //Update state
-                setCars(loadedCars)
-            }
-            catch(error)
-            {
-                //Request has been abroted
-                if(axios.isCancel(error)){
-                    return;
-                }
-
-                if (error instanceof Error) 
-                {
-                    setError(error.message);
-                } 
-
-                else 
-                {
-                    setError("Unexpected error occured.");
-                }
-            }
-
-            finally
-            {
-                //Check if request was aborted
-                if (!controller.signal.aborted) 
-                {
-                    setLoading(false);
-                }
-            }
-        }
-
-        //Call load cars function
-        loadCars()
-
-        //Cleanup
-        return () => {
-            controller.abort();
-        };
-
-    }, [favoriteCarIds])
+  const favoriteCarIds = user ? (favoriteCarIdsByUser[user.id] ?? EMPTY_FAVORITES) : EMPTY_FAVORITES;
 
 
-    //Get only favorite cars
-   const favoriteCars = cars.filter((car)=>{
-        const matchesFavorite = favoriteCarIds.includes(car.id);
-
-        return matchesFavorite;
-
-    })
-
-
-    if (loading) 
-    {
-        return <Loading/>;
-    }
-
-    if (error) 
-    {
-        return <ApiError message={error}/>;
-    }
+  
+  //Get only favorite cars
+  const favoriteCars = cars.filter((car)=>{
+    const matchesFavorite = favoriteCarIds.includes(car.id);
+    return matchesFavorite;
+  })
 
 
-    return(
-       <div className="relative">
+  if (isPending) {
+    return <Loading />;
+  }
+
+  if (isError) {
+    return <ApiError message={error.message} />;
+  }
+
+
+  return(
+    <div className="relative">
       <Button 
         variant="outline" 
         onClick={() => setIsOpen(!isOpen)}
@@ -137,7 +84,7 @@ function FavoritesList (){
         </div>
       )}
     </div>
-    )
+  )
 }
 
 export default FavoritesList;

@@ -1,129 +1,87 @@
-  import { useNavigate, useParams } from "react-router";
-  import type { Car, NewCar } from "../models/Car";
-  import { getCarById, updateCar } from "../services/carService";
-  import { useEffect, useState } from "react";
-  import CarForm from "../components/CarForm";
-  import ApiError from "../components/ApiError";
-  import Loading from "../components/Loading";
-import axios from "axios";
+import { Link, useNavigate, useParams } from "react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getCarById, updateCar } from "../services/carService";
+import { queryKeys } from "../queries/queryKeys";
+import type { CarFormValues } from "../models/CarFormValues";
+import ApiError from "../components/ApiError";
+import Loading from "../components/Loading";
+import CarForm from "../components/CarForm";
 
   function EditCarPage() {
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { id } = useParams();
 
-    const [error, setError] = useState<string | null>(null)
-    const [loading, setLoading] = useState(true)
-    const [car, setCar] = useState<Car | null>(null)
-
-    //Get id param from route
-    const { id } = useParams();
-
-    if(!id)
-    {
-      return <ApiError message={"No id was provided"}/>
-    }
-
-    
-    //Handle car update
-    async function handleUpdateCar(newCarData: NewCar){
-
-      if (!id) return;
+  const {
+    data: car,
+    isPending: isCarPending,
+    isError: isCarError,
+    error: carError,
+  } = useQuery({
+    queryKey: queryKeys.car(id ?? ""),
+    queryFn: ({ signal }) => getCarById(id!, signal),
+    enabled: Boolean(id),
+  });
 
 
-      try
-      {
-        //call service method
-        await updateCar(id, newCarData);
-      
-        //navigate to car list
-        navigate(`/cars/${id}`);
-      }
-      catch(err)
-      {
-        //Request has been abroted
-        if(axios.isCancel(error)){
-          return;
-        }
+  const updateMutation = useMutation({
+    mutationFn: (values: CarFormValues) => updateCar(id!, values),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.cars });
+      queryClient.invalidateQueries({ queryKey: queryKeys.car(id!) });
+      navigate(`/cars/${id}`);
+    },
+  });
 
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("Unexpected error occurred.");
-        }
-      }
-    }
+  function handleUpdateCar(values: CarFormValues) {
+    updateMutation.mutate(values);
+  }
 
 
-
-    //Get car by id
-    useEffect(()=>{
-      const controller = new AbortController();
-    
-      async function loadCar(id: string){
-        try
-        {
-          setLoading(true);
-          setError(null);
-          const loadedCar = await getCarById(id, controller.signal);
-    
-          //Update state
-          setCar(loadedCar);
-          console.log(loadedCar)
-        }
-        catch(error)
-        {
-          //Request has been abroted
-          if(axios.isCancel(error)){
-            return;
-          }
-          if (error instanceof Error) 
-          {
-            setError(error.message);
-          } 
-          else 
-          {
-            setError("Unexpected error occured.");
-          }
-          }
-        finally{
-          //Check if request was aborted
-          if (!controller.signal.aborted) 
-          {
-            setLoading(false);
-          }
-        }
-      }
-    
-        //Call load cars function
-        loadCar(id)
-    
-        //Cleanup
-        return () => {
-          controller.abort();
-        };
-    
-        
-      }, [])
-    
-
-
-    if (error) 
-    {
-      return <ApiError message={error}/>;
-    }
-
-    if (loading) 
-    {
-      return <Loading/>;
-    }
-
+  if (!id) {
     return (
-      <>
-        <h2 className="text-center">Cars edit</h2>
+      <section className="flex flex-col items-center gap-4 mt-[4rem]">
+        <ApiError message="No car ID was provided." />
+        <Link to="/cars" className="underline">
+          Back to cars list
+        </Link>
+      </section>
+    );
+  }
+
+  if (isCarError) {
+    return (
+      <section className="flex flex-col items-center gap-4 mt-[4rem]">
+        <ApiError message={carError.message} />
+        <Link to="/cars" className="underline">
+          Back to cars list
+        </Link>
+      </section>
+    );
+  }
+
+
+  if (isCarPending) {
+    return <Loading />;
+  }
+
+  return (
+    <>
+      <h2 className="text-center">Cars edit</h2>
+
+        {updateMutation.isError && (
+          <div className="max-w-3xl mx-auto mt-4">
+            <ApiError message={updateMutation.error.message} />
+          </div>
+        )}
+
         <CarForm
           onSubmit={handleUpdateCar}
-          initialData={car ?? undefined}
-          submitText="Edit"
+          initialData={car}
+          submitText="Save changes"
+          isSubmitting={updateMutation.isPending}
+          cancelTo={`/cars/${id}`}
         />
       </>
     )

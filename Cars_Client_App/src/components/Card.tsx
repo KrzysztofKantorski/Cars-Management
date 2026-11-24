@@ -13,7 +13,7 @@ import { useAuthStore } from '../store/useAuthStore';
 
 interface CardProps {
   car: Car;
-  onRemove?: (id: string) => Promise<void>;
+  onRemove?: (id: string) => void;
 }
 
 function Card({ car, onRemove }: CardProps){ 

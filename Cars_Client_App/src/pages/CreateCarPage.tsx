@@ -1,52 +1,37 @@
 import { useNavigate } from "react-router";
-import type { NewCar } from "../models/Car"
 import { createCar } from "../services/carService"
-import { useState } from "react";
 import CarForm from "../components/CarForm";
-import ApiError from "../components/ApiError";
-import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../queries/queryKeys";
+import type { CarFormValues } from "../models/CarFormValues";
 
 function CreateCarPage() {
   const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null)
+  const queryClient = useQueryClient();
+
+  const createMutation = useMutation({
+    mutationFn: createCar,
+    onSuccess: (createdCar) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.cars,
+      });
+
+      navigate(`/cars/${createdCar.id}`);
+    },
+  });
 
 
-  //Handle form action
-  async function handleCreateCar(newCarData: NewCar){
-    try{
-      //call service method
-      await createCar(newCarData);
-
-      //navigate to car list
-      navigate("/cars");
-    }
-    catch(error){
-      //Request has been abroted
-      if(axios.isCancel(error)){
-        return;
-      }
-      if (error instanceof Error) 
-      {
-        setError(error.message);
-      } 
-      else 
-      {
-        setError("Unexpected error occured.");
-      }
-    }
+  function handleCreateCar(values: CarFormValues) {
+    createMutation.mutate(values);
   }
-
-  if (error) 
-  {
-    return <ApiError message={error}/>;
-  }
-
+  
 
   return (
     <>
       <h2 className="text-center">Add car</h2>
       <CarForm
         onSubmit={handleCreateCar}
+        isSubmitting={createMutation.isPending}
         submitText="Add"
       />
     </>
