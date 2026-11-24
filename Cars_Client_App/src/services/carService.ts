@@ -1,6 +1,9 @@
 import type { Car,  NewCar } from "../models/Car";
 import {appClient} from "../api/appClient";
 import axios from "axios";
+import type { Feature } from "../models/Feature";
+import type { CarFormValues } from "../models/CarFormValues";
+import type { CarPhoto } from "../models/CarPhoto";
 
 
 //Error handling
@@ -93,37 +96,124 @@ export async function getCarById(
 
 
 
+//Get car features
+export async function getCarFeatures(signal?: AbortSignal): Promise<Feature[]>{
+    try
+    {
+        const response = await appClient.get<Feature[]>(`/features`, {signal});
+        return response.data;   
+    }
+
+    catch(error)
+    {
+        if (axios.isCancel(error)) throw error;
+        throw createServiceError(error, `Could not fetch features`)
+    }
+}
+
+
+
+
 
 
 
 //Create car
 export async function createCar(
-    car: NewCar
+    values: CarFormValues
 ): Promise<Car>
 {
+
     try
     {
-        const response = await appClient.post<Car>(`/cars`, car);
-        return response.data;
+        const { featureIds, ...carData } = values;
+        const response = await appClient.post<Car>(`/cars`, carData);
+        const createdCar = response.data;
+
+        //Assign car features
+        await updateCarFeatures(createdCar.id, featureIds);
+
+        //Get car with assigned features
+        return await getCarById(createdCar.id);
     }   
 
     catch(error)
     {
-        throw createServiceError(error, "Error while creating car.")
+        throw createServiceError(error, "Could not create car")
     }
     
 }
 
 
 
-export async function updateCar(id: string, car: NewCar): Promise<void> {
+export async function updateCar(id: string, values: CarFormValues): Promise<void> {
   try {
-    await appClient.put<Car>(`/cars/${id}`, car);
+    const { featureIds, ...carData } = values;
+    //Update car base data
+    await appClient.put<Car>(`/cars/${id}`, carData);
+
+    //Update relation Car <-> Feature.
+    await updateCarFeatures(id, featureIds);
+
+
   } catch (error) {
-    throw createServiceError(error, "Error while updating car.");
+    throw createServiceError(error, "Could not update car");
   }
 }
 
+
+//Update car features
+export async function updateCarFeatures(
+    carId: string,
+    featureIds: string[],
+): Promise<void> {
+    try {
+        await appClient.put(`/cars/${carId}/features`, {
+        featureIds,
+        });
+    } 
+    catch (error) {
+        throw createServiceError(error, "Could not update features.");
+    }
+}
+
+
+//Add photo
+export async function uploadCarPhoto(
+    carId: string,
+    file: File,
+): Promise<CarPhoto> {
+    try {
+        const formData = new FormData();
+
+        //Name must be ,,file'' - for backend 
+        formData.append("file", file);
+
+        const response = await appClient.post<CarPhoto>(
+            `/cars/${carId}/photos`,
+            formData,
+        );
+
+        return response.data;
+    } 
+    catch (error) {
+        throw createServiceError(error, "Could not upload photo.");
+    }
+}
+
+
+
+//Delete car photo
+export async function deleteCarPhoto(
+    carId: string,
+    photoId: string,
+): Promise<void> {
+    try {
+        await appClient.delete(`/cars/${carId}/photos/${photoId}`);
+    } 
+    catch (error) {
+        throw createServiceError(error, "Could not delete photo.");
+    }
+}
 
 
 
