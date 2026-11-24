@@ -1,3 +1,6 @@
+import type { CarPhoto } from "./CarPhoto";
+import type { Feature } from "./Feature";
+
 export interface Car
 {
     id: string;
@@ -9,7 +12,9 @@ export interface Car
     fuelType: number;
     productionDate: string;
     averageFuelConsumption: number;
-    bodyType: number
+    bodyType: number;
+    photos: CarPhoto[];
+    features: Feature[];
 }
 
 
