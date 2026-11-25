@@ -28,12 +28,15 @@ function CreateCarPage() {
 
   return (
     <>
-      <h2 className="text-center">Add car</h2>
+    <div className="min-h-[100vh] flex items-center justify-center w-screen flex-col">
+     <h2 className="text-4xl mt-[5rem]">Add car</h2>
       <CarForm
         onSubmit={handleCreateCar}
         isSubmitting={createMutation.isPending}
         submitText="Add"
       />
+    </div>
+     
     </>
   )
 }

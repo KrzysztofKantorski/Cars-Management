@@ -18,9 +18,7 @@ function Menu() {
 
   return (
     <>
-    <div className="w-full p-[1rem] bg-none border-b text-card-foreground flex items-center justify-between">
-
-
+    <div className="w-full p-[1rem] bg-background text-card-foreground flex items-center justify-between fixed top-0 left-0 right-0 z-[1000]">
         <NavigationMenu>
         <NavigationMenuList>
 

@@ -69,8 +69,9 @@ import { Button } from "../components/ui/button";
 
   return (
     <>
-      <div className="flex items-center justify-center gap-[2rem] mt-4 flex-col">
-        <h2 className="text-center text-[3rem]">Cars edit</h2>
+    <div className="min-h-[100vh] mt-[5rem] mb-[5rem]">
+      <div className="flex items-center justify-center gap-[2rem] flex-col">
+        <h2 className="text-center text-4xl mt-[2rem]">Cars edit</h2>
         <Button variant="outline">
           <Link to={`/cars/${id}/photos`}>Manage photos</Link>
         </Button>
@@ -88,6 +89,7 @@ import { Button } from "../components/ui/button";
           isSubmitting={updateMutation.isPending}
           cancelTo={`/cars/${id}`}
         />
+      </div>
       </>
     )
   }

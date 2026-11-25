@@ -112,8 +112,8 @@ function CarsPage() {
 
     return (
         <>
-            <div className="flex flex-wrap items-center justify-center gap-[2rem] w-[70%] ml-[15%] mt-[5rem] pb-[5rem]">
-                {deleteMutation.isError && (
+        <div className="flex items-center justify-center w-[70%] ml-[15%] pb-[5rem] min-h-[100vh] flex-col gap-[1rem]">
+            {deleteMutation.isError && (
                     <ApiError message={deleteMutation.error.message}/>
                 )}
                 <SearchBar>
@@ -122,6 +122,8 @@ function CarsPage() {
                 <p className="text-sm text-muted-foreground">
                     Showing {visibleCars.length} of {cars.length} cars
                 </p> 
+            <div className="flex flex-wrap items-center justify-center gap-[2rem]">
+                
 
                 {visibleCars.length === 0 ? 
                 (
@@ -140,6 +142,8 @@ function CarsPage() {
                     </div>
                 )}
             </div>
+        </div>  
+            
         </>
     )
 }

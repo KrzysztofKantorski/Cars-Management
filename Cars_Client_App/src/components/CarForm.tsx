@@ -83,7 +83,7 @@ function CarForm({ onSubmit, initialData, submitText, isSubmitting = false, canc
 
     return(
         <>
-        <div className="flex items-start justify-center w-full mt-[2rem]">
+        <div className="flex items-start justify-center w-full mt-[2rem] mb-8 overflow-hidden">
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full max-w-3xl space-y-6 bg-card p-[2rem] rounded-md bg-card">
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
