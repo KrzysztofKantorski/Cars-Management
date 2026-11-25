@@ -12,6 +12,7 @@ import RegisterPage from './pages/RegisterPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import ConfirmEmailPage from './pages/ConfirmEmailPage'
+import CarPhotoPage from './pages/CarPhotoPage'
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
           <Route path="new" element={<CreateCarPage />} />
           <Route path=":id" element={<CarsDetailsPage />} />
           <Route path=":id/edit" element={<EditCarPage />} />
+          <Route path=":id/photos" element={<CarPhotoPage />} />
         </Route>
       </Route>
       
