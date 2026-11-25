@@ -37,7 +37,7 @@ namespace Cars.Application.Cars
 
                 //Check if car alerdy has photos
                 var hasAnyPhoto = await _context.CarPhotos
-                    .AnyAsync(photo => photo.Id == request.CarId, cancellationToken);
+                    .AnyAsync(photo => photo.CarId == request.CarId, cancellationToken);
 
                 var photo = new CarPhoto
                 {
